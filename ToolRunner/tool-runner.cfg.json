@@ -1,0 +1,98 @@
+﻿[
+	{
+		"Id": ".less",
+		"note" : "less compiler",
+		"OutputExtension": "css",
+		"Commands": [
+			{
+				"ExecutableName": "cmd.exe",
+				"CmdLine": [ "/C", "lessc.cmd", "-no-color", "\"$in\"", "\"$out\"" ]
+			}
+		]
+	},
+
+	{
+		"Id": ".md",
+		"note" : "marked, insert in html file",
+		"OutputExtension": ".html",
+		"Commands": [
+			{
+				"ExecutableName": "cmd.exe",
+				"CmdLine": [ "/C", "marked.cmd", "-i \"$in\"", "-o \"$out\"" ]
+			},
+			{
+				"ExecutableName": "internal:replace",
+				"CmdLine": [ "--content--", ".assets:simple.outer.html" ]
+			}
+		]
+	},
+
+	{
+		"Id": ".cmd",
+		"note" : "cmd",
+		"OutputExtension": ".txt",
+		"Commands": [
+			{
+				"ExecutableName": "cmd.exe",
+				"ReadStdOut": true,
+				"CmdLine": [ "/C", "\"$in\"" ]
+			}
+		]
+	},
+
+	{
+		"Id": ".btm",
+		"note" : "tcc/take command",
+		"OutputExtension": ".txt",
+		"Commands": [
+			{
+				"ExecutableName": "tcc.exe",
+				"ReadStdOut": true,
+				"CmdLine": [ "/C", "\"$in\"" ]
+			}
+		]
+	},
+
+	{
+		"Id": ".ps1",
+		"note" : "powershell",
+		"OutputExtension": ".txt",
+		"Commands": [
+			{
+				"ExecutableName": "powershell.exe",
+				"DebugBreak": false,
+				"ReadStdOut": true,
+				"CmdLine": [ "-noprofile", "-file", "\"$in\"" ]
+			}
+		]
+	},
+
+	{
+		"Id": ".ts",
+		"note" : "typescript",
+		"OutputExtension": ".js",
+		"Commands": [
+			{
+				"ExecutableName": "cmd.exe",
+				"CmdLine": [ "/C", "tsc.cmd", "--out \"$out\"", "\"$in\"" ]
+			}
+		]
+	},
+
+	{
+		"Id": ".nmp4",
+		"note" : "Net Macro Processor",
+		"OutputExtension": "",
+		"Commands": [
+			{
+				"ExecutableName": "nmp4host.exe",
+				"CmdLine": [ "-d:#VSCustomTool=1", "-out:\"$out\"", "\"$in\"" ]
+			}
+		]
+	}
+
+
+
+
+
+]

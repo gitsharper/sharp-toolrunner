@@ -1,0 +1,7 @@
+﻿#.pushBuffer(-1)
+
+#.define( `#fredIs', `Fred is dead')
+
+
+#.popBuffer();;
+#fredIs.Replace()

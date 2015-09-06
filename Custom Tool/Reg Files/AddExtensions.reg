@@ -1,0 +1,14 @@
+Windows Registry Editor Version 5.00
+
+[HKEY_CURRENT_USER\SOFTWARE\Microsoft\VisualStudio\14.0_Config\Generators\{164B10B9-B200-11D0-8C61-00A0C91E29D5}\.nmp4]
+@="SharpToolRunner"
+
+[HKEY_CURRENT_USER\SOFTWARE\Microsoft\VisualStudio\14.0_Config\Generators\{FAE04EC1-301F-11D3-BF4B-00C04F79EFBC}\.nmp4]
+@="SharpToolRunner"
+
+[HKEY_CURRENT_USER\SOFTWARE\Microsoft\VisualStudio\14.0_Config\Generators\{164B10B9-B200-11D0-8C61-00A0C91E29D5}\.less]
+@="SharpToolRunner"
+
+[HKEY_CURRENT_USER\SOFTWARE\Microsoft\VisualStudio\14.0_Config\Generators\{FAE04EC1-301F-11D3-BF4B-00C04F79EFBC}\.less]
+@="SharpToolRunner"
+

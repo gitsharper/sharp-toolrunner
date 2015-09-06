@@ -1,0 +1,12 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="CustomTool.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="less" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">.css;cmd.exe;/C;lessc.cmd;-no-color;"$in";"$out"</Value>
+    </Setting>
+    <Setting Name="nmp4" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">;nmp4host.exe;-d:#VSCustomTool=1;-out:"$out";"$in"</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

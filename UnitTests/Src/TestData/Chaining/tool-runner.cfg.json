@@ -1,0 +1,33 @@
+﻿[
+
+	{
+		"Id": ".nmpx",
+		"OutputExtension": "txt",
+		"FilePatternRx": "",
+		"RunNext": "Copy",
+		"SaveIntermediateFiles": false,
+		"Commands": [
+			{
+				"ExecutableName": "nmp4host.exe",
+				"SaveExtension": "",
+				"CmdLine": [ "-d:#VSCustomTool=1", "-out:\"$out\"", "\"$in\"" ]
+			}
+		]
+	},
+
+	{
+		"Note" : "this is testing chaining",
+		"Id": "copy",
+		"OutputExtension": "copied",
+		"FilePatternRx": "",
+		"RunNext": "",
+		"SaveIntermediateFiles": false,
+		"Commands": [
+			{
+				"ExecutableName": "cmd.exe",
+				"SaveExtension": "",
+				"CmdLine": [ "/C", "copy /b ", "\"$in\"", "\"$out\"" ]
+			}
+		]
+	}
+]

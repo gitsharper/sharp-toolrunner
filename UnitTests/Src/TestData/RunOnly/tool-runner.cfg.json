@@ -1,0 +1,22 @@
+﻿[
+
+	{
+		"Id": ".nmp4",
+		"OutputExtension": "",
+		"SaveIntermediateFiles": false,
+		"Commands": [
+			{
+				"Action": "RunOnly",
+				"ExecutableName": "tcc.exe",
+				"CmdLine": [ "/C", "dir" ]
+			},
+			{
+				"ExecutableName": "nmp4host.exe",
+				"CmdLine": [ "-d:#VSCustomTool=1", "-out:\"$out\"", "\"$in\"" ]
+			}
+
+		]
+	}
+
+
+]

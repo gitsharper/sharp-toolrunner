@@ -1,0 +1,43 @@
+﻿[
+
+	{
+		"Id": "nmpx",
+		"OutputExtension": "txt",
+		"FilePatternRx": "",
+		"RunNext": "",
+		"SaveIntermediateFiles": false,
+		"Commands": [
+			{
+				"ExecutableName": "nmp4host.exe",
+				"SaveExtension": "",
+				"CmdLine": [ "-d:#VSCustomTool=1", "-out:\"$out\"", "\"$in\"" ]
+			},
+			{
+				"ExecutableName": "cmd.exe",
+				"SaveExtension": "",
+				"CmdLine": [ "/C", "copy /b ", "\"$in\"", "\"$out\"" ]
+			}
+		]
+	},
+
+	{
+		"Note" : "this is testing a filename as the Id",
+		"Id": "Cmd-as-file-name.nmpx",
+		"OutputExtension": "txt",
+		"FilePatternRx": "",
+		"RunNext": "",
+		"SaveIntermediateFiles": false,
+		"Commands": [
+			{
+				"ExecutableName": "nmp4host.exe",
+				"SaveExtension": "",
+				"CmdLine": [ "-d:#VSCustomTool=1", "-out:\"$out\"", "\"$in\"" ]
+			},
+			{
+				"ExecutableName": "cmd.exe",
+				"SaveExtension": "",
+				"CmdLine": [ "/C", "copy /b ", "\"$in\"", "\"$out\"" ]
+			}
+		]
+	}
+]

@@ -1,0 +1,7 @@
+#.pushBuffer(-1)
+
+#.define( `#is', `is dead')
+
+#.popBuffer();;
+Fred #is
+
