@@ -435,6 +435,29 @@ $file_base_name The name-only portion of the current file, e.g., Document.
 
 		/////////////////////////////////////////////////////////////////////////////
 
+		bool MatchId( string id, string value )
+		{
+			// ******
+			if( !id.Contains( ',' ) ) {
+				return id == value;
+			}
+
+			// *****
+			var parts = id.Split( new char [] { ',' }, StringSplitOptions.RemoveEmptyEntries );
+			foreach( var part in parts ) {
+				if( part == value ) {
+					return true;
+				}
+			}
+
+			// ******
+			return false;
+		}
+
+
+
+		/////////////////////////////////////////////////////////////////////////////
+
 		public ExtensionRule Locate( string name, string ext )
 		{
 			// ******
@@ -447,7 +470,8 @@ $file_base_name The name-only portion of the current file, e.g., Document.
 			//
 			value = name?.Trim().ToLower();
 			if( !string.IsNullOrEmpty( value ) ) {
-				rule = rules.Find( r => value == r.Id );
+				//rule = rules.Find( r => value == r.Id );
+				rule = rules.Find( r => MatchId( r.Id, value ) );
 				if( null != rule ) {
 					return rule;
 				}
