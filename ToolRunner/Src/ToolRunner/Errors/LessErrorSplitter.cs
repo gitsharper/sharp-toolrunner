@@ -12,23 +12,6 @@ using CustomToolBase;
 
 namespace ToolRunner {
 
-	/*
-	ParseError: Unrecognised input in D:\Work\New 2014\Projects\gitsharper\Sharp-ToolRunner\UnitTests\Src\TestData\Less\tool-runner.in.txt on line 3, column 2:
-	2 	background : blue;
-	3 	@ @
-	4 }
-	
-	ParseError: 
-	Unrecognised input in D:\Work\New 2014\Projects\gitsharper\Sharp-ToolRunner\UnitTests\Src\TestData\Less\tool-runner.in.txt on 
-	line 3, 
-	column 2:
-		
-	err type :
-	err message with embeded/trailing line and column	:
-	block of code surrounding the error
-		
-		*/
-
 
 	/////////////////////////////////////////////////////////////////////////////
 
@@ -46,13 +29,30 @@ namespace ToolRunner {
 
 		/////////////////////////////////////////////////////////////////////////////
 
+		/*
+		ParseError: Unrecognised input in D:\Work\New 2014\Projects\gitsharper\Sharp-ToolRunner\UnitTests\Src\TestData\Less\tool-runner.in.txt on line 3, column 2:
+		2 	background : blue;
+		3 	@ @
+		4 }
+
+		ParseError: 
+		Unrecognised input in D:\Work\New 2014\Projects\gitsharper\Sharp-ToolRunner\UnitTests\Src\TestData\Less\tool-runner.in.txt on 
+		line 3, 
+		column 2:
+
+		err type :
+		err message with embeded/trailing line and column	:
+		block of code surrounding the error
+
+		*/
+
 		public bool Split()
 		{
-			const string regExSplit = @"(?s)\A(.*?):(.*?)\n(.*$)";
-			const string regExLineCol = @"line\s*?(\d*?)[, ]*?column\s*?(\d*?)\s*?:";
+			const string regExSplitError = @"(?s)\A(.*?):(.*?)\n(.*$)";
+			const string regExGetLineCol = @"line\s*?(\d*?)[, ]*?column\s*?(\d*?)\s*?:";
 
 			// ******                         
-			Regex rx = new Regex( regExSplit );
+			Regex rx = new Regex( regExSplitError );
 			Match match = rx.Match( errorString );
 
 			// ******                         
@@ -74,8 +74,10 @@ namespace ToolRunner {
 			var errorMsg = groups [ 2 ].Value.Trim();
 			//var remainder = groups [ 3 ].Value;
 
+			//
 			// ... runner.in.txt on line 3, column 2:
-			Regex rx2 = new Regex( regExLineCol );
+			//
+			Regex rx2 = new Regex( regExGetLineCol );
 			Match match2 = rx2.Match( errorMsg );
 			if( !match2.Success ) {
 				return false;

@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "UnitTests\UnitTests.csproj", "{BB6DD0B8-FBF6-4CDB-8894-1E4556140ECF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Not Really UnitTests", "UnitTests\Not Really UnitTests.csproj", "{BB6DD0B8-FBF6-4CDB-8894-1E4556140ECF}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{C321FAC2-7CE4-4CC8-A3B5-965918597B68}"
 	ProjectSection(SolutionItems) = preProject
