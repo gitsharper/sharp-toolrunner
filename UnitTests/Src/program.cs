@@ -32,7 +32,9 @@ namespace UnitTests {
 
 			//test.RunOnlyTest1();
 
-			test.TypescriptTest1();
+			//test.TypescriptTest1();
+
+			test.Antlr4Test1();
     }
 
 	}

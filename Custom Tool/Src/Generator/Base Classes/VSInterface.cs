@@ -363,7 +363,7 @@ namespace CustomToolBase {
 
 			// ******
 			if( null != generalPane ) {
-				generalPane.OutputString( Helper.SafeStringFormat( fmt, args ) );
+				generalPane.OutputString( Helpers.SafeStringFormat( fmt, args ) );
 				generalPane.Activate(); // Brings this pane into view
 			}
 		}

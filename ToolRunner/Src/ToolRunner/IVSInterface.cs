@@ -47,8 +47,8 @@ namespace ToolRunner {
 
 		public const string Newline = "\r\n";
 
-		public string SolutionFullNameAndPath { get; }
-		public string ProjectFullNameAndPath { get; }
+		public string SolutionFullNameAndPath { get; } = string.Empty;
+		public string ProjectFullNameAndPath { get; } = string.Empty;
 		
 		public ErrorNotifier NotifyOfErrors { get; set; }
 		public SuccessNotifier NotifyOfSuccess { get; set; }

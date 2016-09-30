@@ -67,6 +67,7 @@
     <Compile Include="Src\ToolRunner\Runner\RunOne.Options.cs" />
     <Compile Include="Src\Utility\CollectionHelpers.cs" />
     <Compile Include="Src\Utility\ExecuteArbitrary.cs" />
+    <Compile Include="Src\Utility\FileAndDirectoryHelpers.cs" />
     <Compile Include="Src\Utility\LibInfo.cs" />
     <Compile Include="Src\Utility\StringExtensions.cs" />
     <Compile Include="Src\Utility\Utilities.cs" />

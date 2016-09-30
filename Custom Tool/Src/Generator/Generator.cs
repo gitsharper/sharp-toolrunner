@@ -62,6 +62,22 @@ namespace CustomTool {
 
 	/////////////////////////////////////////////////////////////////////////////
 
+	// to get package to allways load: https://mhusseini.wordpress.com/2013/12/11/automatically-loading-vsix-packages/
+	/*
+
+
+	[PackageRegistration(UseManagedResourcesOnly = true, RegisterUsing = RegistrationMethod.Assembly)]
+[InstalledProductRegistration("#110", "#112", "1.0", IconResourceID = 400)]
+[Guid(GuidList.guidDebuggerAutoAttachPkgString)]
+
+		>>> [ProvideAutoLoad(VSConstants.UICONTEXT.SolutionExistsAndFullyLoaded_string)]
+
+		public sealed class MyTopnotchPackage : Package
+{
+    // maybe you'd want some code inside here...
+}
+*/
+
 	//
 	// identifies this generator
 	//

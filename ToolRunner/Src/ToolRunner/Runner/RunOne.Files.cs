@@ -33,6 +33,19 @@ namespace ToolRunner {
 
 		/////////////////////////////////////////////////////////////////////////////
 
+		string GetTempFilePath( string inputFileName )
+		{
+			// ******
+			var tempDir = Path.GetTempPath();
+			var fileName = Path.IsPathRooted( inputFileName ) ? Path.GetFileName( inputFileName ) : inputFileName;
+
+			// ******
+			return Path.Combine( tempDir, fileName );
+		}
+
+		
+		/////////////////////////////////////////////////////////////////////////////
+
 		//string [] generatedFileNameCommonParts = {
 		//						".tokens",
 		//						"Parser.cs",
@@ -78,8 +91,8 @@ namespace ToolRunner {
 			var filesThatDontExist = allPossibleFiles.Except( filesThatExist );
 
 			// ******
-			reporter.AddFilesToProject( filesThatExist ); //, null );
-			reporter.RemoveFilesFromProject( filesThatDontExist );
+			service.AddFilesToProject( filesThatExist ); //, null );
+			service.RemoveFilesFromProject( filesThatDontExist );
 
 			// ******
 			var sb = new StringBuilder { };

@@ -72,6 +72,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="Src\TestData\Antlr4\parameters.g4" />
+    <None Include="Src\TestData\Antlr4\tool-runner.cfg.json" />
     <None Include="Src\TestData\Less\Less1.less" />
     <None Include="Src\TestData\Less\LessError1.less" />
     <None Include="Src\TestData\MdReplace\simple.outer-html" />

@@ -8,6 +8,8 @@ using System.IO;
 using Newtonsoft.Json;
 
 using Utilities;
+using static Utilities.FileAndDirectoryHelpers;
+
 
 namespace ToolRunner {
 
@@ -169,7 +171,7 @@ $file_base_name The name-only portion of the current file, e.g., Document.
 
 		/////////////////////////////////////////////////////////////////////////////
 
-		public void AssureData( IExtSvcProvider reporter, string fileName )
+		public void AssureData( IExtSvcProvider service, string fileName )
 		{
 			ExecutableName = ExecutableName?.Trim() ?? string.Empty;
 			SaveExtension = SaveExtension.AssureLeadingDot();
@@ -186,7 +188,7 @@ $file_base_name The name-only portion of the current file, e.g., Document.
 				ActionEnum = ae;
 			}
 			else {
-				reporter.SendWarning( fileName, $"\"{Action ?? ""}\" is not a valid action name, using \"Default\"", -1, -1 );
+				service.SendWarning( fileName, $"\"{Action ?? ""}\" is not a valid action name, using \"Default\"", -1, -1 );
 			}
 		}
 
@@ -248,6 +250,24 @@ $file_base_name The name-only portion of the current file, e.g., Document.
 		[JsonProperty]
 		public bool SaveIntermediateFiles { get; set; } = false;
 
+
+
+		[JsonProperty]
+		public bool SaveRestoreResultFiles { get; set; } = false;
+
+		[JsonProperty]
+		public bool VSAddResultFiles { get; set; } = false;
+
+
+		/// <summary>
+		/// Files to save before executing the cmd. If execution fails the files are restored,
+		/// if the cmd is successful then backed up files are deleted.
+		/// </summary>
+		[JsonProperty]
+		public List<string> ResultFiles { get; set; } = new List<string> { };
+
+
+
 		/// <summary>
 		/// One or more commands to execute on the input/result files
 		/// </summary>
@@ -272,8 +292,7 @@ $file_base_name The name-only portion of the current file, e.g., Document.
 
 		public string OutputExtWithDot
 		{
-			get
-			{
+			get {
 				return OutputExtension.AssureLeadingDot();
 			}
 		}
@@ -286,8 +305,7 @@ $file_base_name The name-only portion of the current file, e.g., Document.
 
 		public string OutputExtWithoutDot
 		{
-			get
-			{
+			get {
 				return OutputExtension.AssureNoLeadingDot();
 			}
 		}
@@ -333,7 +351,7 @@ $file_base_name The name-only portion of the current file, e.g., Document.
 		protected List<ExtensionRule> rules = new List<ExtensionRule> { };
 
 		// ******
-		IExtSvcProvider reporter;
+		IExtSvcProvider service;
 		//protected IVSInterface Report;
 
 		// ******
@@ -350,13 +368,13 @@ $file_base_name The name-only portion of the current file, e.g., Document.
 				if( null != result ) {
 					result.ForEach( rule => {
 						rule.Location = fileName;
-						rule.AssureData( reporter, fileName );
+						rule.AssureData( service, fileName );
 					} );
 					rules.AddRange( result );
 				}
 			}
 			catch( Exception ex ) {
-				reporter.SendWarning( fileName, "Could not process configuration file " + ex.Message, -1, -1 );
+				service.SendWarning( fileName, "Could not process configuration file " + ex.Message, -1, -1 );
 				return false;
 			}
 
@@ -364,7 +382,52 @@ $file_base_name The name-only portion of the current file, e.g., Document.
 			return true;
 		}
 
+
 		/////////////////////////////////////////////////////////////////////////////
+
+		/*
+			add directory where ERules class (dll) lives
+
+			add users directory (mydocuments/sharp-toolrunner)
+
+			start at file directory and walk backwards until find named .csproj
+			(first .csproj if no name provided) and use that directory
+
+			keep moving backwards (checking .csproj directory first) looking for
+			a named .sln file, if no name provided use the first that is found
+
+
+		assumption that file to convert is deeper in the project tree than the
+		project or solution file
+
+
+			bool NoProjectSearch
+			bool NoSolutionSearch
+
+			//
+			// in the following a '*' before the name will force the custom tool to use
+			// the ProjectName or SolutionName instead of the names provided by Visual
+			// Studio 
+			//
+
+		? what about full or pratial paths
+
+				a name with no path is searched by walking the directory tree backwards
+
+				a name with a partial path is searched for relative to the directory in which
+				.cfg.json file is located
+
+				a full path (as Visual Studio returns) is checked by removing the project/solution name
+
+
+
+
+
+			string ProjectName
+			string SolutionName
+
+		*/
+
 
 		void Initialize( string startPath )
 		{
@@ -379,33 +442,44 @@ $file_base_name The name-only portion of the current file, e.g., Document.
 			// file/rules closest to the input file will override rules in files/rules 
 			// more distant
 			//
-			directories.Add( startPath );
+			directories.Add( FixPath( startPath, string.Empty ) );
 
-			try {
-				//
-				// should (but dont) check each directory from input down to project, and then
-				// solution
-				//
-				var path = reporter.ProjectFullNameAndPath;
-				if( !string.IsNullOrEmpty( path ) ) {
-					var projectDir = Path.GetFullPath( Path.GetDirectoryName( path ) );
-					directories.Add( projectDir );
-				}
+			//try {
+			//	//
+			//	// should (but dont) check each directory from input down to project, and then
+			//	// solution
+			//	//
+			//	var path = service.ProjectFullNameAndPath;
+			//	if( !string.IsNullOrEmpty( path ) ) {
+			//		var projectDir = Path.GetFullPath( Path.GetDirectoryName( path ) );
+			//		directories.Add( projectDir );
+			//	}
+			//
+			//	path = service.SolutionFullNameAndPath;
+			//	if( !string.IsNullOrEmpty( path ) ) {
+			//		var solutionDir = Path.GetFullPath( Path.GetDirectoryName( path ) );
+			//		directories.Add( solutionDir );
+			//	}
+			//}
+			//catch {
+			//}
 
-				if( !string.IsNullOrEmpty( path ) ) {
-					path = reporter.SolutionFullNameAndPath;
-					var solutionDir = Path.GetFullPath( Path.GetDirectoryName( path ) );
-					directories.Add( solutionDir );
-				}
-			}
-			catch {
-			}
-
+			//
+			// user directory in MyDocuments
+			//
 			var special = Environment.GetFolderPath( Environment.SpecialFolder.MyDocuments );
 			directories.Add( Path.Combine( special, USER_TOOLRUNNER_FOLDER ) );
 
+			//
+			// ToolRunner execuitable directory
+			//
 			var extDir = Path.GetFullPath( LibInfo.CodeBasePath );
 			directories.Add( extDir );
+
+			//
+			// order farthest to nearest
+			//
+			directories.Reverse();
 
 			// ******
 			foreach( var dir in directories ) {
@@ -427,7 +501,7 @@ $file_base_name The name-only portion of the current file, e.g., Document.
 					AddRules( text, path );
 				}
 				catch( Exception ex ) {
-					reporter.SendWarning( path, "Could not read configuration file " + ex.Message, -1, -1 );
+					service.SendWarning( path, "Could not read configuration file " + ex.Message, -1, -1 );
 				}
 			}
 		}
@@ -511,9 +585,9 @@ $file_base_name The name-only portion of the current file, e.g., Document.
 
 		/////////////////////////////////////////////////////////////////////////////
 
-		public ERules( string startPath, IExtSvcProvider reporter )
+		public ERules( string startPath, IExtSvcProvider service )
 		{
-			this.reporter = reporter;
+			this.service = service;
 			//this.Report = report;
 			Initialize( startPath );
 		}

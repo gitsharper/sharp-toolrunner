@@ -50,7 +50,18 @@ namespace ToolRunner {
 		// ******
 		public bool SaveOutput { get; set; } = false;
 
+		public string InputFileName { get { return inputFileName; } }
 
+
+
+		/////////////////////////////////////////////////////////////////////////////
+
+		public ERules Rules
+		{
+			get {
+				return new ERules( Path.GetDirectoryName( inputFileName ), Service );
+			}
+		}
 
 
 		/////////////////////////////////////////////////////////////////////////////
@@ -162,6 +173,170 @@ namespace ToolRunner {
 
 		/////////////////////////////////////////////////////////////////////////////
 
+		string GetTempFilePath( string inputFileName )
+		{
+			// ******
+			var tempDir = Path.GetTempPath();
+			var fileName = Path.IsPathRooted( inputFileName ) ? Path.GetFileName( inputFileName ) : inputFileName;
+
+			// ******
+			return Path.Combine( tempDir, fileName );
+		}
+
+		/////////////////////////////////////////////////////////////////////////////
+
+		//string AddFilesToProject()
+		//{
+		//	// ******
+		//	var allPossibleFiles = GetPossibleFileNames( inputFileName );
+		//	var filesThatExist = DiscoverGeneratedFiles( inputFileName );
+		//	var filesThatDontExist = allPossibleFiles.Except( filesThatExist );
+		//
+		//	// ******
+		//	if( null != vsi ) {
+		//		vsi.AddFilesToProject( filesThatExist, null );
+		//		vsi.RemoveFilesFromProject( filesThatDontExist );
+		//	}
+		//
+		//	// ******
+		//	var sb = new StringBuilder { };
+		//
+		//	sb.Append( "Files that are in, or have just been added to project:\r\n" );
+		//	foreach( var name in filesThatExist ) {
+		//		sb.AppendFormat( "{0}\r\n", name );
+		//	}
+		//
+		//	sb.Append( "Files that have been removed from the project:\r\n" );
+		//	foreach( var name in filesThatDontExist ) {
+		//		sb.AppendFormat( "{0}\r\n", name );
+		//	}
+		//
+		//	// ******
+		//	return sb.ToString();
+		//}
+
+
+		/////////////////////////////////////////////////////////////////////////////
+
+		//Hello.g4
+
+		string [] generatedFileNameCommonParts = {
+								".tokens",
+								"Parser.cs",
+								"Lexer.cs",
+								"Lexer.tokens",
+								"BaseListener.cs",
+								"Listener.cs",
+								"BaseVisitor.cs",
+								"Visitor.cs",
+							};
+
+		List<string> GetPossibleFileNames( string inputFileName )
+		{
+			// ******
+			var path = Path.GetDirectoryName( inputFileName );
+			var fileName = Path.GetFileNameWithoutExtension( inputFileName );
+			var baseNameAndPath = Path.Combine( path, fileName );
+
+			// ******
+			var list = new List<string> { };
+			foreach( var item in generatedFileNameCommonParts ) {
+				list.Add( baseNameAndPath + item );
+			}
+
+			// ******
+			return list;
+		}
+
+		/////////////////////////////////////////////////////////////////////////////
+
+		void DeleteFiles( List<string> files )
+		{
+			foreach( var file in files ) {
+				try {
+					if( File.Exists( file ) ) {
+						File.Delete( file );
+					}
+				}
+				catch {
+				}
+			}
+		}
+
+
+		/////////////////////////////////////////////////////////////////////////////
+
+		List<string> DiscoverGeneratedFiles( string inputFileName )
+		{
+			// ******
+			var possibleFilePaths = GetPossibleFileNames( inputFileName );
+			var foundFiles = new List<string> { };
+
+			foreach( var filePath in possibleFilePaths ) {
+				if( File.Exists( filePath ) ) {
+					foundFiles.Add( filePath );
+				}
+			}
+
+			// ******
+			return foundFiles;
+		}
+
+
+		/////////////////////////////////////////////////////////////////////////////
+
+		List<string> RenameFilesForBackup( List<string> files )
+		{
+			// ******
+			var renamedFiles = new List<string> { };
+
+			foreach( var fileName in files ) {
+				var tempFileName = fileName + ".backup";
+				renamedFiles.Add( tempFileName );
+
+				try {
+					if( File.Exists( tempFileName ) ) {
+						File.Delete( tempFileName );
+					}
+				}
+				catch {
+				}
+
+				File.Move( fileName, tempFileName );
+			}
+
+			// ******
+			return renamedFiles;
+		}
+
+
+		/////////////////////////////////////////////////////////////////////////////
+
+		void RestoreFilesFromBackup( List<string> files )
+		{
+			// ******
+			foreach( var fileName in files ) {
+				var restoredFileName = Path.Combine( Path.GetDirectoryName( fileName ), Path.GetFileNameWithoutExtension( fileName ) );
+				try {
+					if( File.Exists( restoredFileName ) ) {
+
+						// ?????
+
+						File.Delete( restoredFileName );
+					}
+					if( File.Exists( fileName ) ) {
+						File.Move( fileName, restoredFileName );
+					}
+				}
+				catch {
+
+				}
+			}
+		}
+
+
+		/////////////////////////////////////////////////////////////////////////////
+
 		protected bool TryGenerate( ExtensionRule rule, out string result )
 		{
 			// ******
@@ -169,6 +344,16 @@ namespace ToolRunner {
 
 			// ******
 			var input = currentInput.Duplicate();
+
+			// ******
+			var backedUpFiles = new List<string> { };
+
+			var existingGeneratedFiles = DiscoverGeneratedFiles( input.NameWithPath );
+
+			//if( existingGeneratedFiles.Count > 0 ) {
+			//	backedUpFiles = RenameFilesForBackup( existingGeneratedFiles );
+			//}
+
 			try {
 				foreach( var cmd in rule.Commands ) {
 
@@ -176,6 +361,7 @@ namespace ToolRunner {
 					var run = new RunOne( input, Service );
 					var success = run.Run( cmd, out result );
 					if( !success ) {
+						DeleteFiles( backedUpFiles );
 						return false;
 					}
 
@@ -219,6 +405,7 @@ namespace ToolRunner {
 			}
 
 			// ******
+			RestoreFilesFromBackup( backedUpFiles );
 			return true;
 		}
 
@@ -302,7 +489,8 @@ namespace ToolRunner {
 					// ******
 					if( !string.IsNullOrWhiteSpace( rule.FilePatternRx ) ) {
 						//
-						// must match rule.FileNameWithoutExt
+						// must match rule.FileNameWithoutExt if we're to process
+						// rule.RunNext
 						//
 						Regex rx = new Regex( rule.FilePatternRx );
 						if( !rx.IsMatch( currentInput.FileNameWithoutExt ) ) {
@@ -359,7 +547,7 @@ namespace ToolRunner {
 				//
 			}
 
-			if( null == service) {
+			if( null == service ) {
 				this.Service = service = new Service { };
 			}
 

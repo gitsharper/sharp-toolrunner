@@ -34,6 +34,11 @@ namespace ToolRunner {
 
 		/////////////////////////////////////////////////////////////////////////////
 
+			//
+			// rework this to use "//#" or a comment in the files langauge which can be
+			// set in config 
+			//
+
 		List<string> GetOptions( ref string source )
 		{
 			const string STARTS_CMD_ARG = "//#";
