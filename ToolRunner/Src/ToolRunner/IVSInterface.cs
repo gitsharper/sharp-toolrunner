@@ -58,9 +58,9 @@ namespace ToolRunner {
 		
 		public void AddFilesToProject( IEnumerable<string> paths )
 		{
-			foreach( var path in paths) {
-				OutputToWindow( $"request: add file to project \"{path}\"" );
-      }
+			//foreach( var path in paths) {
+			//	OutputToWindow( $"request: add file to project \"{path}\"" );
+   //   }
 		}
 
 
@@ -68,9 +68,9 @@ namespace ToolRunner {
 		
 		public void RemoveFilesFromProject( IEnumerable<string> paths )
 		{
-			foreach( var path in paths ) {
-				OutputToWindow( $"request: remove file from project \"{path}\"" );
-			}
+			//foreach( var path in paths ) {
+			//	OutputToWindow( $"request: remove file from project \"{path}\"" );
+			//}
 		}
 
 

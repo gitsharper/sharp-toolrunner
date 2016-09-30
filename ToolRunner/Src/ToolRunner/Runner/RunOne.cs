@@ -5,6 +5,8 @@ using System.Linq;
 using System.IO;
 using Utilities;
 
+using static Utilities.FileAndDirectoryHelpers;
+
 namespace ToolRunner {
 
 	/////////////////////////////////////////////////////////////////////////////
@@ -52,19 +54,19 @@ namespace ToolRunner {
 
 		/////////////////////////////////////////////////////////////////////////////
 
-		string FixSrcNameInStdErr( string stdErr, string tempInputName, string actualInputName )
-		{
-			// ******
-			string result = stdErr;
-			while( true ) {
-				if( result.Contains( tempInputName ) ) {
-					result = result.Replace( tempInputName, actualInputName );
-				}
-				else {
-					return result;
-				}
-			}
-		}
+		//string FixSrcNameInStdErr( string stdErr, string tempInputName, string actualInputName )
+		//{
+		//	// ******
+		//	string result = stdErr;
+		//	while( true ) {
+		//		if( result.Contains( tempInputName ) ) {
+		//			result = result.Replace( tempInputName, actualInputName );
+		//		}
+		//		else {
+		//			return result;
+		//		}
+		//	}
+		//}
 
 
 		/////////////////////////////////////////////////////////////////////////////
@@ -101,35 +103,35 @@ namespace ToolRunner {
 		public bool Run( ERCommand erCmd, out string result )
 		{
 			// ******
-			result = string.Empty;
+			result = null;
 
 			if( Debugger.IsAttached && erCmd.DebugBreak ) {
 				Debugger.Break();
 			}
 
 			// ******
-			var cmd = erCmd.ExecutableName;
-			if( string.IsNullOrWhiteSpace( cmd ) ) {
+			var execuitable = erCmd.ExecutableName;
+			if( string.IsNullOrWhiteSpace( execuitable ) ) {
 				service.NotifyOfErrors( ErrorType.PrepError, "no command name was provided" );
 				return false;
 			}
 
 			// ******
 			const string INTERNAL = "internal:";
-			if( cmd.StartsWith( INTERNAL, StringComparison.OrdinalIgnoreCase ) ) {
-				return TryHandleInternalCmd( cmd.Substring( INTERNAL.Length ), erCmd, input.Content, out result );
+			if( execuitable.StartsWith( INTERNAL, StringComparison.OrdinalIgnoreCase ) ) {
+				return TryHandleInternalCmd( execuitable.Substring( INTERNAL.Length ), erCmd, input.Content, out result );
 			}
 
 			// ******
-			var cmdExt = Path.GetExtension( cmd );
+			var cmdExt = Path.GetExtension( execuitable );
 			//
 			// should look this up in the registery
 			//
 			if( ".cmd" == cmdExt || ".bat" == cmdExt ) {
-				cmd = "cmd.exe";
+				execuitable = "cmd.exe";
 			}
 			else if( ".btm" == cmdExt ) {
-				cmd = "tcc.exe";
+				execuitable = "tcc.exe";
 			}
 
 			// ******
@@ -137,7 +139,6 @@ namespace ToolRunner {
 			var bareFileName = input.NameWithoutExt;
 			var cmdInputFile = GetTempFilePath( bareFileName );
 			var cmdOutputFile = GetFilePath( bareFileName, ".out.txt" );
-
 
 			try {
 				var proccessedInputText = ProcessOptions( input.Content );
@@ -148,19 +149,27 @@ namespace ToolRunner {
 
 				// ******
 				var run = new External { };
-				var exeResult = run.Execute( cmd, false, commandLine, 10000 );
+				var exeResult = run.Execute( execuitable, false, commandLine, 10000 );
 
 				if( exeResult.Success ) {
 					var exitCode = exeResult.ExitCode;
 
 					if( ActionEnum.RunOnlyIgnoreExitCode == erCmd.ActionEnum ) {
+						//
+						// don't expect or handle output file, no exit code check
+						//
 						success = true;
 					}
 					else if( ActionEnum.RunOnly == erCmd.ActionEnum ) {
+						//
+						// don't expect or handle output file, do check exit code
+						//
 						success = 0 == exitCode;
 					}
 					else {
-
+						//
+						// expect output, do check exit code
+						//
 						if( 0 == exitCode ) {
 							//
 							// success
@@ -177,15 +186,16 @@ namespace ToolRunner {
 								result = null;
 							}
 
-							if( success ) {
+							//if( success ) {
 								service.NotifyOfSuccess();
-							}
+							//}
 						}
 						else {
 							//
 							// failure
 							//
-							var errStr = FixSrcNameInStdErr( exeResult.StdErr, cmdInputFile, input.NameWithPath );
+							//var errStr = FixSrcNameInStdErr( exeResult.StdErr, cmdInputFile, input.NameWithPath );
+							var errStr = exeResult.StdErr.Replace( cmdInputFile, input.NameWithPath );
 							service.NotifyOfErrors( ErrorType.Error, errStr );
 							success = false;
 						}
@@ -196,7 +206,7 @@ namespace ToolRunner {
 					//
 					// failed to execute cmd
 					//
-					service.NotifyOfErrors( ErrorType.FailureToExecute, cmd );
+					service.NotifyOfErrors( ErrorType.FailureToExecute, execuitable );
 					success = false;
 				}
 
@@ -204,7 +214,7 @@ namespace ToolRunner {
 			finally {
 
 				if( !KeepTempFiles ) {
-					DeleteFiles( new List<string> { cmdInputFile, cmdOutputFile } );
+					ResultFilesHelper.DeleteFiles( new List<string> { cmdInputFile, cmdOutputFile } );
 				}
 
 			}

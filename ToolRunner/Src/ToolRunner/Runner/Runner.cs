@@ -183,156 +183,153 @@ namespace ToolRunner {
 			return Path.Combine( tempDir, fileName );
 		}
 
-		/////////////////////////////////////////////////////////////////////////////
-
-		//string AddFilesToProject()
-		//{
-		//	// ******
-		//	var allPossibleFiles = GetPossibleFileNames( inputFileName );
-		//	var filesThatExist = DiscoverGeneratedFiles( inputFileName );
-		//	var filesThatDontExist = allPossibleFiles.Except( filesThatExist );
+		//		/////////////////////////////////////////////////////////////////////////////
 		//
-		//	// ******
-		//	if( null != vsi ) {
-		//		vsi.AddFilesToProject( filesThatExist, null );
-		//		vsi.RemoveFilesFromProject( filesThatDontExist );
-		//	}
+		//		string AddFilesToProject()
+		//		{
+		//			// ******
+		//			//			var allPossibleFiles = GetPossibleFileNames( inputFileName );
+		//			//			var filesThatExist = DiscoverGeneratedFiles( inputFileName );
+		//			//			var filesThatDontExist = allPossibleFiles.Except( filesThatExist );
 		//
-		//	// ******
-		//	var sb = new StringBuilder { };
+		//			//	// ******
+		//			//	if( null != vsi ) {
+		//			//		vsi.AddFilesToProject( filesThatExist, null );
+		//			//		vsi.RemoveFilesFromProject( filesThatDontExist );
+		//			//	}
 		//
-		//	sb.Append( "Files that are in, or have just been added to project:\r\n" );
-		//	foreach( var name in filesThatExist ) {
-		//		sb.AppendFormat( "{0}\r\n", name );
-		//	}
+		//			// ******
+		//			var sb = new StringBuilder { };
 		//
-		//	sb.Append( "Files that have been removed from the project:\r\n" );
-		//	foreach( var name in filesThatDontExist ) {
-		//		sb.AppendFormat( "{0}\r\n", name );
-		//	}
+		//			//	sb.Append( "Files that are in, or have just been added to project:\r\n" );
+		//			//	foreach( var name in filesThatExist ) {
+		//			//		sb.AppendFormat( "{0}\r\n", name );
+		//			//	}
+		//			//
+		//			//	sb.Append( "Files that have been removed from the project:\r\n" );
+		//			//	foreach( var name in filesThatDontExist ) {
+		//			//		sb.AppendFormat( "{0}\r\n", name );
+		//			//	}
 		//
-		//	// ******
-		//	return sb.ToString();
-		//}
-
-
-		/////////////////////////////////////////////////////////////////////////////
-
-		//Hello.g4
-
-		string [] generatedFileNameCommonParts = {
-								".tokens",
-								"Parser.cs",
-								"Lexer.cs",
-								"Lexer.tokens",
-								"BaseListener.cs",
-								"Listener.cs",
-								"BaseVisitor.cs",
-								"Visitor.cs",
-							};
-
-		List<string> GetPossibleFileNames( string inputFileName )
-		{
-			// ******
-			var path = Path.GetDirectoryName( inputFileName );
-			var fileName = Path.GetFileNameWithoutExtension( inputFileName );
-			var baseNameAndPath = Path.Combine( path, fileName );
-
-			// ******
-			var list = new List<string> { };
-			foreach( var item in generatedFileNameCommonParts ) {
-				list.Add( baseNameAndPath + item );
-			}
-
-			// ******
-			return list;
-		}
-
-		/////////////////////////////////////////////////////////////////////////////
-
-		void DeleteFiles( List<string> files )
-		{
-			foreach( var file in files ) {
-				try {
-					if( File.Exists( file ) ) {
-						File.Delete( file );
-					}
-				}
-				catch {
-				}
-			}
-		}
-
-
-		/////////////////////////////////////////////////////////////////////////////
-
-		List<string> DiscoverGeneratedFiles( string inputFileName )
-		{
-			// ******
-			var possibleFilePaths = GetPossibleFileNames( inputFileName );
-			var foundFiles = new List<string> { };
-
-			foreach( var filePath in possibleFilePaths ) {
-				if( File.Exists( filePath ) ) {
-					foundFiles.Add( filePath );
-				}
-			}
-
-			// ******
-			return foundFiles;
-		}
-
-
-		/////////////////////////////////////////////////////////////////////////////
-
-		List<string> RenameFilesForBackup( List<string> files )
-		{
-			// ******
-			var renamedFiles = new List<string> { };
-
-			foreach( var fileName in files ) {
-				var tempFileName = fileName + ".backup";
-				renamedFiles.Add( tempFileName );
-
-				try {
-					if( File.Exists( tempFileName ) ) {
-						File.Delete( tempFileName );
-					}
-				}
-				catch {
-				}
-
-				File.Move( fileName, tempFileName );
-			}
-
-			// ******
-			return renamedFiles;
-		}
-
-
-		/////////////////////////////////////////////////////////////////////////////
-
-		void RestoreFilesFromBackup( List<string> files )
-		{
-			// ******
-			foreach( var fileName in files ) {
-				var restoredFileName = Path.Combine( Path.GetDirectoryName( fileName ), Path.GetFileNameWithoutExtension( fileName ) );
-				try {
-					if( File.Exists( restoredFileName ) ) {
-
-						// ?????
-
-						File.Delete( restoredFileName );
-					}
-					if( File.Exists( fileName ) ) {
-						File.Move( fileName, restoredFileName );
-					}
-				}
-				catch {
-
-				}
-			}
-		}
+		//			// ******
+		//			return sb.ToString();
+		//		}
+		//
+		//
+		//		/////////////////////////////////////////////////////////////////////////////
+		//
+		//		List<string> GetPossibleFileNames( InputFile srcFile, IEnumerable<string> resultFiles )
+		//		{
+		//			// ******
+		//			var list = new List<string> { };
+		//			if( null == resultFiles || 0 == resultFiles.Count() ) {
+		//				return list;
+		//			}
+		//
+		//			// ******
+		//			var path = srcFile.PathOnly;
+		//			var fileNameOnly = srcFile.NameWithoutExt;
+		//
+		//			foreach( var item in resultFiles ) {
+		//				if( string.IsNullOrWhiteSpace( item ) ) {
+		//					continue;
+		//				}
+		//
+		//				// ******
+		//				var name = '*' == item [ 0 ] ? fileNameOnly + item.Substring( 1 ) : item;
+		//				list.Add( Path.Combine( path, name ) );
+		//			}
+		//
+		//			// ******
+		//			return list;
+		//		}
+		//
+		//
+		//		/////////////////////////////////////////////////////////////////////////////
+		//
+		//		void DeleteFiles( List<string> files )
+		//		{
+		//			foreach( var file in files ) {
+		//				try {
+		//					if( File.Exists( file ) ) {
+		//						File.Delete( file );
+		//					}
+		//				}
+		//				catch {
+		//				}
+		//			}
+		//		}
+		//
+		//
+		//		/////////////////////////////////////////////////////////////////////////////
+		//
+		//		List<string> DiscoverGeneratedFiles( InputFile srcFile, IEnumerable<string> resultFiles )
+		//		{
+		//			// ******
+		//			var possibleFilePaths = GetPossibleFileNames( srcFile, resultFiles );
+		//			var foundFiles = new List<string> { };
+		//
+		//			foreach( var filePath in possibleFilePaths ) {
+		//				if( File.Exists( filePath ) ) {
+		//					foundFiles.Add( filePath );
+		//				}
+		//			}
+		//
+		//			// ******
+		//			return foundFiles;
+		//		}
+		//
+		//
+		//		/////////////////////////////////////////////////////////////////////////////
+		//
+		//		List<string> RenameFilesForBackup( List<string> files )
+		//		{
+		//			// ******
+		//			var renamedFiles = new List<string> { };
+		//
+		//			foreach( var fileName in files ) {
+		//				var tempFileName = fileName + ".backup";
+		//				renamedFiles.Add( tempFileName );
+		//
+		//				try {
+		//					if( File.Exists( tempFileName ) ) {
+		//						File.Delete( tempFileName );
+		//					}
+		//				}
+		//				catch {
+		//				}
+		//
+		//				File.Move( fileName, tempFileName );
+		//			}
+		//
+		//			// ******
+		//			return renamedFiles;
+		//		}
+		//
+		//
+		//		/////////////////////////////////////////////////////////////////////////////
+		//
+		//		void RestoreFilesFromBackup( List<string> files )
+		//		{
+		//			// ******
+		//			foreach( var fileName in files ) {
+		//				var restoredFileName = Path.Combine( Path.GetDirectoryName( fileName ), Path.GetFileNameWithoutExtension( fileName ) );
+		//				try {
+		//					if( File.Exists( restoredFileName ) ) {
+		//
+		//						// ?????
+		//
+		//						File.Delete( restoredFileName );
+		//					}
+		//					if( File.Exists( fileName ) ) {
+		//						File.Move( fileName, restoredFileName );
+		//					}
+		//				}
+		//				catch {
+		//
+		//				}
+		//			}
+		//		}
 
 
 		/////////////////////////////////////////////////////////////////////////////
@@ -341,71 +338,94 @@ namespace ToolRunner {
 		{
 			// ******
 			result = string.Empty;
-
-			// ******
 			var input = currentInput.Duplicate();
 
 			// ******
 			var backedUpFiles = new List<string> { };
-
-			var existingGeneratedFiles = DiscoverGeneratedFiles( input.NameWithPath );
-
-			//if( existingGeneratedFiles.Count > 0 ) {
-			//	backedUpFiles = RenameFilesForBackup( existingGeneratedFiles );
-			//}
-
-			try {
-				foreach( var cmd in rule.Commands ) {
-
-					// ******
-					var run = new RunOne( input, Service );
-					var success = run.Run( cmd, out result );
-					if( !success ) {
-						DeleteFiles( backedUpFiles );
-						return false;
-					}
-
-					if( cmd.IgnoreResults() ) {
-						//
-						// RunOnlyIgnoreExitCode or RunOnly, any output is ignored so there
-						// is no need to set new Content on input, or save the file
-						//
-						continue;
-					}
-
-					// ******
-					//
-					// if true it flags that the tool we executed did not return any results, Run()
-					// leaves it up to us to handle	if it's an error, or not
-					//
-					if( null == result ) {
-						//
-						// there was no output file from the tool
-						//
-						// if cmd.AllowNoOutput is true (default is false) then the input
-						// to the next tool, or the output from sharp-ToolRunner will be empty
-						//
-						result = string.Empty;
-						if( !cmd.AllowNoOutput ) {
-							Service.SendError( inputFileName, $"the command \"{cmd.ExecutableName}\" producted no output", -1, -1 );
-							return false;
-						}
-					}
-
-					// ******
-					if( rule.SaveIntermediateFiles && cmd != rule.Commands.Last() ) {
-						WriteFile( input, cmd.SaveExtension, result );
-					}
-
-					// ******
-					input.SetContent( result );
+			if( rule.SaveRestoreResultFiles ) {
+				//
+				// rule calls for files in rule.ResultFiles to be backed up, and restored if
+				// there is a failure
+				//
+				var existingGeneratedFiles = ResultFilesHelper.DiscoverGeneratedFiles( input, rule.ResultFiles );
+				if( existingGeneratedFiles.Count > 0 ) {
+					backedUpFiles = ResultFilesHelper.RenameFilesForBackup( existingGeneratedFiles );
 				}
-			}
-			finally {
 			}
 
 			// ******
-			RestoreFilesFromBackup( backedUpFiles );
+			bool generateSuccess = true;
+			foreach( var cmd in rule.Commands ) {
+
+				// ******
+				var run = new RunOne( input, Service );
+				//
+				// if 'success' is false we DO NOT know if the command could not be executed,
+				// or if the commands exit code was other than zero - we just know Run failed
+				//
+				var success = run.Run( cmd, out result );
+				if( !success ) {
+					generateSuccess = false;
+					break;
+				}
+
+				if( cmd.IgnoreResults() ) {
+					//
+					// RunOnlyIgnoreExitCode or RunOnly, any output is ignored so there
+					// is no need to set new Content on input, or save the file
+					//
+					continue;
+				}
+
+				// ******
+				//
+				// if true it flags that the tool we executed did not return any results, Run()
+				// leaves it up to us to handle	if it's an error, or not
+				//
+				if( string.IsNullOrEmpty( result ) ) {
+					//
+					// there was no output from the tool
+					//
+					// if cmd.AllowNoOutput is true (default is false) then the input
+					// to the next tool, or the output from sharp-ToolRunner will be empty
+					//
+					result = string.Empty;
+					if( !cmd.AllowNoOutput ) {
+						Service.SendError( inputFileName, $"the command \"{cmd.ExecutableName}\" producted no output", -1, -1 );
+						generateSuccess = false;
+						break;
+					}
+				}
+
+				// ******
+				if( rule.SaveIntermediateFiles && cmd != rule.Commands.Last() ) {
+					WriteFile( input, cmd.SaveExtension, result );
+				}
+
+				// ******
+				input.SetContent( result );
+			}
+
+			// ******
+			if( generateSuccess ) {
+				ResultFilesHelper.DeleteFiles( backedUpFiles );
+
+				if( rule.VSAddResultFiles ) {
+					//
+					// rule wants the file in rule.ResultFiles to be added to the visual studio project
+					// beneath the source file - children of the source file
+					//
+					// note this will only work if running as a custom tool under visual studio, the
+					// command line took just ignores the request
+					//
+					ResultFilesHelper.AddFilesToProject( input, rule.ResultFiles, Service );
+				}
+			}
+			else {
+				ResultFilesHelper.RestoreFilesFromBackup( backedUpFiles );
+			}
+
+			// ******
 			return true;
 		}
 

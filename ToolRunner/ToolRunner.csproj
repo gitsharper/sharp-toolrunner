@@ -61,9 +61,9 @@
     <Compile Include="Src\ToolRunner\IReport.cs" />
     <Compile Include="Src\ToolRunner\IVSInterface.cs" />
     <Compile Include="Src\ToolRunner\Rules\ERules.cs" />
+    <Compile Include="Src\ToolRunner\Runner\ResultFilesHelper.cs" />
     <Compile Include="Src\ToolRunner\Runner\Runner.cs" />
     <Compile Include="Src\ToolRunner\Runner\RunOne.cs" />
-    <Compile Include="Src\ToolRunner\Runner\RunOne.Files.cs" />
     <Compile Include="Src\ToolRunner\Runner\RunOne.Options.cs" />
     <Compile Include="Src\Utility\CollectionHelpers.cs" />
     <Compile Include="Src\Utility\ExecuteArbitrary.cs" />

@@ -1,0 +1,48 @@
+﻿[
+
+	{
+		"Id": ".g4",
+		"OutputExtension": "",
+		"SaveIntermediateFiles": false,
+
+		"ResultFiles": [
+			"*.tokens",
+			"*Parser.cs",
+			"*Lexer.cs",
+			"*Lexer.tokens",
+			"*BaseListener.cs",
+			"*Listener.cs",
+			"*BaseVisitor.cs",
+			"*Visitor.cs"
+		],
+
+		"SaveRestoreResultFiles": true,
+		"VSAddResultFiles": true,
+
+		"Commands": [
+			{
+				"ExecutableName": "java.exe",
+				"AllowNoOutput": true,
+				"CmdLine": [
+					"-jar \"c:\\Program Files\\Antlr4\\antlr-4.5.3-complete.jar\"",
+					"-o \"$file_path\"",
+					"-message-format vs2005",
+					"-Dlanguage=CSharp",
+					"\"$in\""
+				]
+			}
+
+		]
+	}
+
+
+]
+
+// CLASSPATH=
+
+//cl.AppendFormat( "-jar \"{0}\\{1}\" ", LibInfo.CodeBasePath, JAR_FILE );
+//cl.AppendFormat( "-o \"{0}\" ", outputDir.RemoveTrailingSeparator() );
+//cl.Append( "-message-format vs2005 " );
+//cl.Append( "-Dlanguage=CSharp " );
+//cl.Append( GetOptionsString( inputFileContents ) );
+//cl.AppendFormat( "\"{0}\"", srcFilePath );
