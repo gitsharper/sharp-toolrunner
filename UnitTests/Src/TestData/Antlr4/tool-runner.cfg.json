@@ -38,11 +38,4 @@
 
 ]
 
-// CLASSPATH=
 
-//cl.AppendFormat( "-jar \"{0}\\{1}\" ", LibInfo.CodeBasePath, JAR_FILE );
-//cl.AppendFormat( "-o \"{0}\" ", outputDir.RemoveTrailingSeparator() );
-//cl.Append( "-message-format vs2005 " );
-//cl.Append( "-Dlanguage=CSharp " );
-//cl.Append( GetOptionsString( inputFileContents ) );
-//cl.AppendFormat( "\"{0}\"", srcFilePath );

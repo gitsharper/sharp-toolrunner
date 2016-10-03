@@ -1,4 +1,4 @@
-# Readme.md
+﻿# Readme.md
 
 Sharp-ToolRunner (STR) is a Visual Studio add-in that allows you to transform one file type into another file type; in Visual Studio parlance it's a "single file generator". An example would be converting a ".less" file into a ".css" file, or a ".md" file into an ".html" file.
 
@@ -88,7 +88,59 @@ Note. If there is already an entry from some tool other than SharpToolRunner you
 
 ### Configuration file entries
 
-Currently there are several entries in the configuration file.
+Currently there are several entries in the configuration file. Check the sharp-toolrunner.cfg.json file for the latest configuration as these examples may be out of date.
+
+#### .g4 (Antlr4 compiler)
+
+Antlr4 generates more than one output file which is handled by this configuration.
+
+Before I explain how that works note that (1) this configuration produces C# from the grammar file, (2) java.exe must be in the path, and (2) "antlr-4.5.3-complete.jar" must be given a full path following the "-jar" (the only way I was able to get java.exe to find the antlr4 jar file, note: I speak very little java and there may be a better way to do this). (3) you can put "antlr-4.5.3-complete.jar" anywhere you want, but the path must be set correctly, this is setup for my machine.
+
+For an Antlr4 grammar file named "parser.g4":
+
+* The output file for parser.g4 will be "parser" (no file extension) and the file will be empty.
+* Additional output files will be placed in the same directory as the source file, there is no current way to change this.
+* Any existing output files from a previously successful run will be backed up and restored if the current run fails ("SaveRestoreResultFiles" below).
+* All output files will be added as children of the source file if the run is successful and the run takes place from within Visual Studio ("VSAddResultFiles"). The files will not be added if the run takes place with the command line version of Sharp-ToolRunner.
+* * ![](./images/children.png?raw=true)
+![](https://github.com/gitsharper/sharp-toolrunner/blob/master/Images/children.png)
+* In the "ResultFiles" array any file name that begins with '\*' will have the '\*' replaced by the input file name with extension, in the example "parser".
+
+```
+{
+		"Id": ".g4",
+		"OutputExtension": "",
+		"SaveIntermediateFiles": false,
+
+		"ResultFiles": [
+			"*.tokens",
+			"*Parser.cs",
+			"*Lexer.cs",
+			"*Lexer.tokens",
+			"*BaseListener.cs",
+			"*Listener.cs",
+			"*BaseVisitor.cs",
+			"*Visitor.cs"
+		],
+
+		"SaveRestoreResultFiles": true,
+		"VSAddResultFiles": true,
+
+		"Commands": [
+			{
+				"ExecutableName": "java.exe",
+				"AllowNoOutput": true,
+				"CmdLine": [
+					"-jar \"c:\\Program Files\\Antlr4\\antlr-4.5.3-complete.jar\"",
+					"-o \"$file_path\"",
+					"-message-format vs2005",
+					"-Dlanguage=CSharp",
+					"\"$in\""
+				]
+			}
+
+		]
+	}```
 
 #### .less (less compiler)
 

@@ -1,36 +1,21 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-  <title>
-		Markdown Converted to Html<title>
-  </title>
-  
-  <style type="text/css">
-
-  </style>
-  
-  </head>
-	
-	<body>
-    <div>
-		<h1 id="readme-md">Readme.md</h1>
-<p>Sharp-ToolRunner (STR) is a Visual Studio add-in that allows you to transform one file type into another file type; in Visual Studio parlance it&#39;s a &quot;single file generator&quot;. An example would be converting a &quot;.less&quot; file into a &quot;.css&quot; file, or a &quot;.md&quot; file into an &quot;.html&quot; file.</p>
-<h3 id="before-i-continue-">Before I continue ...</h3>
-<p>There are other tools that do similar things and if you&#39;re interest is in &quot;.less -&gt; .css&quot;, or &quot;.md -&gt; .html&quot; processing you probably want to use one of those tools. STR does not add editing features or syntax highlighting, it does not even perform the compiling, translation, or transforms on your files itself. STR calls the compiler or translator in the background when you save your file.</p>
-<p>&quot;.less&quot;, and &quot;.md&quot; files are examples, you can run any application or script that has a command line interface that allows you to perform the actions you require. Normally you will want to take the file you&#39;re editing in Visual Studio, pass it through a transformation, and then have Visual Studio save the result to a different file in your project. If need be you can run multiple commands against the source file, or pipe the results from one program to another until you have the created the result you want.</p>
-<p>STR does not include the &quot;.less&quot;, &quot;.md&quot;, or any other translators/compilers within it&#39;s installer. Any programs or scripts you required to perform the actions you require must already be installed and working properly on your system before STR can make use of them.</p>
-<h3 id="configuration-files">Configuration files</h3>
+﻿<h1>Readme.md</h1>
+<p>Sharp-ToolRunner (STR) is a Visual Studio add-in that allows you to transform one file type into another file type; in Visual Studio parlance it's a &quot;single file generator&quot;. An example would be converting a &quot;.less&quot; file into a &quot;.css&quot; file, or a &quot;.md&quot; file into an &quot;.html&quot; file.</p>
+<h3>Before I continue ...</h3>
+<p>There are other tools that do similar things and if you're interest is in &quot;.less -&gt; .css&quot;, or &quot;.md -&gt; .html&quot; processing you probably want to use one of those tools. STR does not add editing features or syntax highlighting, it does not even perform the compiling, translation, or transforms on your files itself. STR calls the compiler or translator in the background when you save your file.</p>
+<p>&quot;.less&quot;, and &quot;.md&quot; files are examples, you can run any application or script that has a command line interface that allows you to perform the actions you require. Normally you will want to take the file you're editing in Visual Studio, pass it through a transformation, and then have Visual Studio save the result to a different file in your project. If need be you can run multiple commands against the source file, or pipe the results from one program to another until you have the created the result you want.</p>
+<p>STR does not include the &quot;.less&quot;, &quot;.md&quot;, or any other translators/compilers within it's installer. Any programs or scripts you required to perform the actions you require must already be installed and working properly on your system before STR can make use of them.</p>
+<h3>Configuration files</h3>
 <p>STR works by reading a configuration file <strong>which you can easily extend to include your own tools</strong>. It processes target (input) files by looking up their extension, or file name. The configuration file is written in JSON which (might) make for easy editing.</p>
-<pre><code class="lang-json">    {
-        &quot;Id&quot;: &quot;.less&quot;,
-        &quot;OutputExtension&quot;: &quot;.css&quot;,
-        &quot;Commands&quot;: [
-            {
-                &quot;ExecutableName&quot;: &quot;cmd.exe&quot;,
-                &quot;CmdLine&quot;: [ &quot;/C&quot;, &quot;lessc.cmd&quot;, &quot;-no-color&quot;, &quot;\&quot;$in\&quot;&quot;, &quot;\&quot;$out\&quot;&quot; ]
-            }
-        ]
-    }
+<pre><code class="language-json">	{
+		&quot;Id&quot;: &quot;.less&quot;,
+		&quot;OutputExtension&quot;: &quot;.css&quot;,
+		&quot;Commands&quot;: [
+			{
+				&quot;ExecutableName&quot;: &quot;cmd.exe&quot;,
+				&quot;CmdLine&quot;: [ &quot;/C&quot;, &quot;lessc.cmd&quot;, &quot;-no-color&quot;, &quot;\&quot;$in\&quot;&quot;, &quot;\&quot;$out\&quot;&quot; ]
+			}
+		]
+	}
 </code></pre>
 <p>The entry above is for less and should be read something like this:</p>
 <ul>
@@ -39,28 +24,28 @@
 <li>With the command line: /C lessc.cmd -no-color &quot;input_file&quot; &quot;output_file&quot;</li>
 <li>The extension returned to Visual Studio is &quot;.css&quot;</li>
 </ul>
-<p>Several things to note. </p>
+<p>Several things to note.</p>
 <ul>
 <li>$in and $out are markers to tell STR where to place the names of the input and output files on the command line.</li>
-<li>If no output file is created by the tool being called (you should know this and not use the $out marker) STR will read STDOUT if you have set &#39;&quot;ReadStdOut&quot; : true&#39; for the command.</li>
+<li>If no output file is created by the tool being called (you should know this and not use the $out marker) STR will read STDOUT if you have set '&quot;ReadStdOut&quot; : true' for the command.</li>
 <li>The result of the translation is passed to Visual Studio which saves the final output file.</li>
 </ul>
-<h3 id="additionally">Additionally</h3>
+<h3>Additionally</h3>
 <p>You can use file names in the &quot;Id&quot; member of a rule, this allows for configurations for specific files.</p>
-<pre><code class="lang-json">    {
-        &quot;Id&quot;: &quot;SpecialFile.less&quot;,
-        &quot;OutputExtension&quot;: &quot;.xcss&quot;,
-        &quot;Commands&quot;: [
-            {
-                &quot;ExecutableName&quot;: &quot;cmd.exe&quot;,
-                &quot;CmdLine&quot;: [ &quot;/C&quot;, &quot;lessc.cmd&quot;, &quot;-no-color&quot;, &quot;\&quot;$in\&quot;&quot;, &quot;\&quot;$out\&quot;&quot; ]
-            }
-        ]
-    }
+<pre><code class="language-json">	{
+		&quot;Id&quot;: &quot;SpecialFile.less&quot;,
+		&quot;OutputExtension&quot;: &quot;.xcss&quot;,
+		&quot;Commands&quot;: [
+			{
+				&quot;ExecutableName&quot;: &quot;cmd.exe&quot;,
+				&quot;CmdLine&quot;: [ &quot;/C&quot;, &quot;lessc.cmd&quot;, &quot;-no-color&quot;, &quot;\&quot;$in\&quot;&quot;, &quot;\&quot;$out\&quot;&quot; ]
+			}
+		]
+	}
 </code></pre>
 <p>For any files named &quot;SpecialFile.less&quot; STR would invoke the normal compilation for a &quot;.less&quot; file, but would pass the &quot;.xcss&quot; extension (rather than &quot;.css&quot;) back to Visual Studio.</p>
 <p>There are several other &quot;tricks&quot;, and commands you can use which I will document later.</p>
-<h3 id="configuration-file-location">Configuration file location</h3>
+<h3>Configuration file location</h3>
 <p>You can have multiple configuration files, there locations can be:</p>
 <ol>
 <li>The directory in which the target file exits.</li>
@@ -71,104 +56,148 @@
 </ol>
 <p>The configuration files are read first to last creating a list of rules with the highest precedence being given to the rules &quot;closest&quot; to the target file. So, if you have a rule for &quot;.md&quot; in a configuration file in the target files directory it will be chosen instead of any rule defined in any other configuration file.</p>
 <p>The name of the configuration file is always <strong>tool-runner.cfg.json</strong>.</p>
-<h3 id="registering-sharp-toolrunner-as-a-custom-tool-for-your-files">Registering Sharp-ToolRunner as a Custom Tool for your files</h3>
+<h3>Registering Sharp-ToolRunner as a Custom Tool for your files</h3>
 <p>Before you can use STR you must associate it as a &quot;Custom Tool&quot; with the files you wish to work with, you do this with the files properties. Right click on the file in Solution Explorer and select &quot;Properties&quot;. On the files property page add &quot;SharpToolRunner&quot; as the &quot;Custom Tool&quot;.</p>
-<p>Note. If there is already an entry from some tool other than SharpToolRunner you <strong><em>probably do not</em></strong> want to replace it. If you do decide to replace it make sure you know what you&#39;re doing, Visual Studio can sometimes be very opaque about what configuration options it sets and it can be difficult getting back to where you started.</p>
-<p><img src="./images/FileProperties.png?raw=true" alt="">
-<img src="https://github.com/gitsharper/sharp-toolrunner/blob/master/Images/FileProperties.png" alt=""></p>
-<h3 id="configuration-file-entries">Configuration file entries</h3>
-<p>Currently there are several entries in the configuration file.</p>
-<h4 id="-less-less-compiler-">.less (less compiler)</h4>
-<pre><code class="lang-json">    {
-        &quot;Id&quot;: &quot;.less&quot;,
-        &quot;OutputExtension&quot;: &quot;css&quot;,
-        &quot;Commands&quot;: [
-            {
-                &quot;ExecutableName&quot;: &quot;cmd.exe&quot;,
-                &quot;CmdLine&quot;: [ &quot;/C&quot;, &quot;lessc.cmd&quot;, &quot;-no-color&quot;, &quot;\&quot;$in\&quot;&quot;, &quot;\&quot;$out\&quot;&quot; ]
-            }
-        ]
-    },
+<p>Note. If there is already an entry from some tool other than SharpToolRunner you <strong><em>probably do not</em></strong> want to replace it. If you do decide to replace it make sure you know what you're doing, Visual Studio can sometimes be very opaque about what configuration options it sets and it can be difficult getting back to where you started.</p>
+<p><img src="./images/FileProperties.png?raw=true" alt="" />
+<img src="https://github.com/gitsharper/sharp-toolrunner/blob/master/Images/FileProperties.png" alt="" /></p>
+<h3>Configuration file entries</h3>
+<p>Currently there are several entries in the configuration file. Check the sharp-toolrunner.cfg.json file for the latest configuration as these examples may be out of date.</p>
+<h4>.g4 (Antlr4 compiler)</h4>
+<p>Antlr4 generates more than one output file which is handled by this configuration.</p>
+<p>Before I explain how that works note that (1) this configuration produces C# from the grammar file, (2) java.exe must be in the path, and (2) &quot;antlr-4.5.3-complete.jar&quot; must be given a full path following the &quot;-jar&quot; (the only way I was able to get java.exe to find the antlr4 jar file, note: I speak very little java and there may be a better way to do this). (3) you can put &quot;antlr-4.5.3-complete.jar&quot; anywhere you want, but the path must be set correctly, this is setup for my machine.</p>
+<p>For an Antlr4 grammar file named &quot;parser.g4&quot;:</p>
+<ul>
+<li>The output file for parser.g4 will be &quot;parser&quot; (no file extension) and the file will be empty.</li>
+<li>Additional output files will be placed in the same directory as the source file, there is no current way to change this.</li>
+<li>Any existing output files from a previously successful run will be backed up and restored if the current run fails (&quot;SaveRestoreResultFiles&quot; below).</li>
+<li>All output files will be added as children of the source file if the run is successful and the run takes place from within Visual Studio (&quot;VSAddResultFiles&quot;). The files will not be added if the run takes place with the command line version of Sharp-ToolRunner.</li>
+<li>In the &quot;ResultFiles&quot; array any file name that begins with '*' will have the '*' replaced by the input file name with extension, in the example &quot;parser&quot;.</li>
+</ul>
+<pre><code>{
+		&quot;Id&quot;: &quot;.g4&quot;,
+		&quot;OutputExtension&quot;: &quot;&quot;,
+		&quot;SaveIntermediateFiles&quot;: false,
+
+		&quot;ResultFiles&quot;: [
+			&quot;*.tokens&quot;,
+			&quot;*Parser.cs&quot;,
+			&quot;*Lexer.cs&quot;,
+			&quot;*Lexer.tokens&quot;,
+			&quot;*BaseListener.cs&quot;,
+			&quot;*Listener.cs&quot;,
+			&quot;*BaseVisitor.cs&quot;,
+			&quot;*Visitor.cs&quot;
+		],
+
+		&quot;SaveRestoreResultFiles&quot;: true,
+		&quot;VSAddResultFiles&quot;: true,
+
+		&quot;Commands&quot;: [
+			{
+				&quot;ExecutableName&quot;: &quot;java.exe&quot;,
+				&quot;AllowNoOutput&quot;: true,
+				&quot;CmdLine&quot;: [
+					&quot;-jar \&quot;c:\\Program Files\\Antlr4\\antlr-4.5.3-complete.jar\&quot;&quot;,
+					&quot;-o \&quot;$file_path\&quot;&quot;,
+					&quot;-message-format vs2005&quot;,
+					&quot;-Dlanguage=CSharp&quot;,
+					&quot;\&quot;$in\&quot;&quot;
+				]
+			}
+
+		]
+	}```
+
+#### .less (less compiler)
+
+```json
+	{
+		&quot;Id&quot;: &quot;.less&quot;,
+		&quot;OutputExtension&quot;: &quot;css&quot;,
+		&quot;Commands&quot;: [
+			{
+				&quot;ExecutableName&quot;: &quot;cmd.exe&quot;,
+				&quot;CmdLine&quot;: [ &quot;/C&quot;, &quot;lessc.cmd&quot;, &quot;-no-color&quot;, &quot;\&quot;$in\&quot;&quot;, &quot;\&quot;$out\&quot;&quot; ]
+			}
+		]
+	},
 </code></pre>
-<h4 id="-md-markdown-via-marked-to-html-file-">.md (markdown via marked, to html file)</h4>
-<pre><code class="lang-json">    {
-        &quot;Id&quot;: &quot;.md&quot;,
-        &quot;OutputExtension&quot;: &quot;.html&quot;,
-        &quot;Commands&quot;: [
-            {
-                &quot;ExecutableName&quot;: &quot;cmd.exe&quot;,
-                &quot;CmdLine&quot;: [ &quot;/C&quot;, &quot;marked.cmd&quot;, &quot;-i \&quot;$in\&quot;&quot;, &quot;-o \&quot;$out\&quot;&quot; ]
-            },
-            {
-                &quot;ExecutableName&quot;: &quot;internal:replace&quot;,
-                &quot;CmdLine&quot;: [ &quot;--content--&quot;, &quot;.assets:simple.outer.html&quot; ]
-            }
-        ]
-    }
+<h4>.md (markdown via marked, to html file)</h4>
+<pre><code class="language-json">	{
+		&quot;Id&quot;: &quot;.md&quot;,
+		&quot;OutputExtension&quot;: &quot;.html&quot;,
+		&quot;Commands&quot;: [
+			{
+				&quot;ExecutableName&quot;: &quot;cmd.exe&quot;,
+				&quot;CmdLine&quot;: [ &quot;/C&quot;, &quot;marked.cmd&quot;, &quot;-i \&quot;$in\&quot;&quot;, &quot;-o \&quot;$out\&quot;&quot; ]
+			},
+			{
+				&quot;ExecutableName&quot;: &quot;internal:replace&quot;,
+				&quot;CmdLine&quot;: [ &quot;--content--&quot;, &quot;.assets:simple.outer.html&quot; ]
+			}
+		]
+	}
 </code></pre>
 <p>This translate markdown (.md) to html. There a several things to note about this entry.</p>
 <ul>
 <li>It has multiple commands associated with it.</li>
 <li>The second command is for an STR internal command named &quot;replace&quot;.</li>
 </ul>
-<p>The &quot;replace&quot; command takes two arguments, &quot;--content--&quot; which is the text &quot;replace&quot; will try to locate within the file referenced by the second argument. This text (&quot;--content--&quot;) will be replaced by the output of the first command (the &quot;marked&quot; compiler). The second argument (file name) starts with &quot;.assets:&quot; which indicates STR should find it in the &quot;.Assets&quot; folder of the STR installation directory. You can customize the output by changing the .html file used; add a configuration higher up the chain and create a new entry for &quot;.md&quot;, add a reference to your own html source file somewhere in the file system. An absolute file name (&quot;c:\files\some-file.html&quot;) will be searched for as is. A file name or name with a partial path will be searched for relative to the input file&#39;s location.</p>
-<h4 id="-ps1-powershell-">.ps1 (powershell)</h4>
-<pre><code class="lang-json">    {
-        &quot;Id&quot;: &quot;.ps1&quot;,
-        &quot;OutputExtension&quot;: &quot;.txt&quot;,
-        &quot;Commands&quot;: [
-            {
-                &quot;ExecutableName&quot;: &quot;powershell.exe&quot;,
-                &quot;ReadStdOut&quot;: true,
-                &quot;CmdLine&quot;: [ &quot;-noprofile&quot;, &quot;-file&quot;, &quot;\&quot;$in\&quot;&quot; ]
-            }
-        ]
-    },
+<p>The &quot;replace&quot; command takes two arguments, &quot;--content--&quot; which is the text &quot;replace&quot; will try to locate within the file referenced by the second argument. This text (&quot;--content--&quot;) will be replaced by the output of the first command (the &quot;marked&quot; compiler). The second argument (file name) starts with &quot;.assets:&quot; which indicates STR should find it in the &quot;.Assets&quot; folder of the STR installation directory. You can customize the output by changing the .html file used; add a configuration higher up the chain and create a new entry for &quot;.md&quot;, add a reference to your own html source file somewhere in the file system. An absolute file name (&quot;c:\files\some-file.html&quot;) will be searched for as is. A file name or name with a partial path will be searched for relative to the input file's location.</p>
+<h4>.ps1 (powershell)</h4>
+<pre><code class="language-json">	{
+		&quot;Id&quot;: &quot;.ps1&quot;,
+		&quot;OutputExtension&quot;: &quot;.txt&quot;,
+		&quot;Commands&quot;: [
+			{
+				&quot;ExecutableName&quot;: &quot;powershell.exe&quot;,
+				&quot;ReadStdOut&quot;: true,
+				&quot;CmdLine&quot;: [ &quot;-noprofile&quot;, &quot;-file&quot;, &quot;\&quot;$in\&quot;&quot; ]
+			}
+		]
+	},
 </code></pre>
 <p>Note &quot;ReadStdOut&quot; is set to true;</p>
-<h4 id="-btm-jpsoft-s-tcc-and-take-command-processors-">.btm (jpsoft&#39;s &#39;TCC&#39; and &quot;Take Command&quot; processors)</h4>
-<pre><code class="lang-json">    {
-        &quot;Id&quot;: &quot;.btm&quot;,
-        &quot;OutputExtension&quot;: &quot;.txt&quot;,
-        &quot;Commands&quot;: [
-            {
-                &quot;ExecutableName&quot;: &quot;tcc.exe&quot;,
-                &quot;ReadStdOut&quot;: true,
-                &quot;CmdLine&quot;: [ &quot;/C&quot;, &quot;\&quot;$in\&quot;&quot; ]
-            }
-        ]
-    },
+<h4>.btm (jpsoft's 'TCC' and &quot;Take Command&quot; processors)</h4>
+<pre><code class="language-json">	{
+		&quot;Id&quot;: &quot;.btm&quot;,
+		&quot;OutputExtension&quot;: &quot;.txt&quot;,
+		&quot;Commands&quot;: [
+			{
+				&quot;ExecutableName&quot;: &quot;tcc.exe&quot;,
+				&quot;ReadStdOut&quot;: true,
+				&quot;CmdLine&quot;: [ &quot;/C&quot;, &quot;\&quot;$in\&quot;&quot; ]
+			}
+		]
+	},
 </code></pre>
-<h4 id="-ts-typescript-">.ts (typescript)</h4>
-<pre><code class="lang-json">    {
-        &quot;Id&quot;: &quot;.ts&quot;,
-        &quot;note&quot; : &quot;typescript&quot;,
-        &quot;Commands&quot;: [
-            {
-                &quot;ExecutableName&quot;: &quot;cmd.exe&quot;,
-                &quot;CmdLine&quot;: [ &quot;/C&quot;, &quot;tsc.cmd&quot;, &quot;--out \&quot;$out\&quot;&quot;, &quot;\&quot;$in\&quot;&quot; ]
-            }
-        ]
-    },
+<h4>.ts (typescript)</h4>
+<pre><code class="language-json">	{
+		&quot;Id&quot;: &quot;.ts&quot;,
+		&quot;note&quot; : &quot;typescript&quot;,
+		&quot;Commands&quot;: [
+			{
+				&quot;ExecutableName&quot;: &quot;cmd.exe&quot;,
+				&quot;CmdLine&quot;: [ &quot;/C&quot;, &quot;tsc.cmd&quot;, &quot;--out \&quot;$out\&quot;&quot;, &quot;\&quot;$in\&quot;&quot; ]
+			}
+		]
+	},
 </code></pre>
-<h4 id="-nmp4-net-macro-processor-">.nmp4 (Net Macro Processor)</h4>
-<pre><code class="lang-json">{
-        &quot;Id&quot;: &quot;.nmp4&quot;,
-        &quot;OutputExtension&quot;: &quot;&quot;,
-        &quot;Commands&quot;: [
-            {
-                &quot;ExecutableName&quot;: &quot;nmp4host.exe&quot;,
-                &quot;CmdLine&quot;: [ &quot;-d:#VSCustomTool=1&quot;, &quot;-out:\&quot;$out\&quot;&quot;, &quot;\&quot;$in\&quot;&quot; ]
-            }
-        ]
-    },
+<h4>.nmp4 (Net Macro Processor)</h4>
+<pre><code class="language-json">{
+		&quot;Id&quot;: &quot;.nmp4&quot;,
+		&quot;OutputExtension&quot;: &quot;&quot;,
+		&quot;Commands&quot;: [
+			{
+				&quot;ExecutableName&quot;: &quot;nmp4host.exe&quot;,
+				&quot;CmdLine&quot;: [ &quot;-d:#VSCustomTool=1&quot;, &quot;-out:\&quot;$out\&quot;&quot;, &quot;\&quot;$in\&quot;&quot; ]
+			}
+		]
+	},
 </code></pre>
-<p>This is something of my own invention but is unavailable because of it&#39;s horrible error tracking and reporting.</p>
-<p>The only interesting thing to note here is that &quot;OutputExtension is empty (&quot;&quot;). This is because the macro processor has a convention where the name of the input file name contains the output extension embedded within it, e.g. &quot;translate.txt.nmp4&quot;. The &quot;.nmp4&quot; gets stripped off and we&#39;re left with &quot;translate.txt&quot;. You might or might not find this technique useful.</p>
-<h3 id="license">License</h3>
+<p>This is something of my own invention but is unavailable because of it's horrible error tracking and reporting.</p>
+<p>The only interesting thing to note here is that &quot;OutputExtension is empty (&quot;&quot;). This is because the macro processor has a convention where the name of the input file name contains the output extension embedded within it, e.g. &quot;translate.txt.nmp4&quot;. The &quot;.nmp4&quot; gets stripped off and we're left with &quot;translate.txt&quot;. You might or might not find this technique useful.</p>
+<h3>License</h3>
 <p><a href="license.txt">Eclipse Public License</a></p>
 
-		</div>    
-  </body>
-  
-</html>

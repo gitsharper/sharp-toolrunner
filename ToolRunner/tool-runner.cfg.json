@@ -1,7 +1,42 @@
 ﻿[
 	{
+		"Id": ".g4",
+		"note": "Antlr4 tool, C# target",
+		"OutputExtension": "",
+		"SaveIntermediateFiles": false,
+
+		"ResultFiles": [
+			"*.tokens",
+			"*Parser.cs",
+			"*Lexer.cs",
+			"*Lexer.tokens",
+			"*BaseListener.cs",
+			"*Listener.cs",
+			"*BaseVisitor.cs",
+			"*Visitor.cs"
+		],
+
+		"SaveRestoreResultFiles": true,
+		"VSAddResultFiles": true,
+
+		"Commands": [
+			{
+				"ExecutableName": "java.exe",
+				"AllowNoOutput": true,
+				"CmdLine": [
+					"-jar \"c:\\Program Files\\Antlr4\\antlr-4.5.3-complete.jar\"",
+					"-o \"$file_path\"",
+					"-message-format vs2005",
+					"-Dlanguage=CSharp",
+					"\"$in\""
+				]
+			}
+
+		]
+	},
+	{
 		"Id": ".less",
-		"note" : "less compiler",
+		"note": "less compiler",
 		"OutputExtension": "css",
 		"Commands": [
 			{
@@ -13,7 +48,7 @@
 
 	{
 		"Id": ".md",
-		"note" : "marked, insert in html file",
+		"note": "marked, insert in html file",
 		"OutputExtension": ".html",
 		"Commands": [
 			{
@@ -29,7 +64,7 @@
 
 	{
 		"Id": ".cmd",
-		"note" : "cmd",
+		"note": "cmd",
 		"OutputExtension": ".txt",
 		"Commands": [
 			{
@@ -42,7 +77,7 @@
 
 	{
 		"Id": ".btm",
-		"note" : "tcc/take command",
+		"note": "tcc/take command",
 		"OutputExtension": ".txt",
 		"Commands": [
 			{
@@ -55,7 +90,7 @@
 
 	{
 		"Id": ".ps1",
-		"note" : "powershell",
+		"note": "powershell",
 		"OutputExtension": ".txt",
 		"Commands": [
 			{
@@ -69,7 +104,7 @@
 
 	{
 		"Id": ".ts",
-		"note" : "typescript",
+		"note": "typescript",
 		"OutputExtension": ".js",
 		"Commands": [
 			{
@@ -81,7 +116,7 @@
 
 	{
 		"Id": ".nmp4",
-		"note" : "Net Macro Processor",
+		"note": "Net Macro Processor",
 		"OutputExtension": "",
 		"Commands": [
 			{
