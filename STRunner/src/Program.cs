@@ -154,13 +154,19 @@ namespace STRunner {
 					}
 				}
 				else {
-					switch( cmd ) {
+					switch( cmd.ToLower() ) {
 						case "p":
 						case "project":
 							break;
 
 						case "s":
 						case "solution":
+							break;
+
+						case "w":
+						case "watch":
+							new Watcher( value ).Run();
+							Environment.Exit( 0 );
 							break;
 
 						default:
@@ -199,7 +205,7 @@ namespace STRunner {
 
 					string result;
 					string outExt;
-					runner.Generate( out result, out outExt );
+					runner.Generate( true, out result, out outExt );
 				}
 				catch( Exception ex ) {
 					throw;
@@ -285,7 +291,6 @@ namespace STRunner {
 
 		/////////////////////////////////////////////////////////////////////////////
 
-		// C:\Users\joe\AppData\Roaming\cltweetie\cltweetie.config
 		const string AppName = "strunner";
 
 		static int Main( string [] args )
@@ -325,10 +330,10 @@ namespace STRunner {
 				PreProcessCmds( cmds );
 				ProcessCmds( cmds );
 
-				//Console.ReadKey();
-				if( Debugger.IsAttached ) {
-					Debugger.Break();
-				}
+				////Console.ReadKey();
+				//if( Debugger.IsAttached ) {
+				//	Debugger.Break();
+				//}
 
 				return 0;
 			}

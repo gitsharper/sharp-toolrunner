@@ -101,7 +101,7 @@ namespace ToolRunner {
 
 		/////////////////////////////////////////////////////////////////////////////
 
-		protected string _trySubstitute( string str, string strToCheckFor, string substStr )
+		protected static string _trySubstitute( string str, string strToCheckFor, string substStr )
 		{
 			// ******
 			var index = str.IndexOf( strToCheckFor, StringComparison.OrdinalIgnoreCase );
@@ -124,25 +124,35 @@ $file_extension The extension portion of the current file, e.g., txt.
 $file_base_name The name-only portion of the current file, e.g., Document. 
 		*/
 
-		public List<string> Substitute( InputFile inputFile, string srcPath, string destPath, List<string> extraArgs )
+		public static List<string> Substitute( List<string> args, InputFile inputFile, string srcPath, string destPath, List<string> extraArgs )
 		{
-			// ******
 			var processedCmds = new List<string> { };
-			var moreArgs = extraArgs.Combine( " " );
+			var moreArgs = extraArgs?.Combine( " " ) ?? null;
 			var toolRunnerDir = LibInfo.CodeBasePath + "\\";
+			var assetsDir = LibInfo.CodeBasePath + $"\\{Replace.ASSETS_FOLDER}\\";
 
-			foreach( var cmd in CmdLine ) {
-				var arg = cmd;
-
+			foreach( var item in args ) {
+				var arg = item;
 				if( string.IsNullOrWhiteSpace( arg ) ) {
 					continue;
 				}
 
-				arg = _trySubstitute( arg, "$in", srcPath );
-				arg = _trySubstitute( arg, "$out", destPath );
-				arg = _trySubstitute( arg, "$args", moreArgs );
+				// ******
+				if( null != srcPath ) {
+					arg = _trySubstitute( arg, "$in", srcPath );
+				}
 
+				if( null != destPath ) {
+					arg = _trySubstitute( arg, "$out", destPath );
+				}
+
+				if( null != extraArgs ) {
+					arg = _trySubstitute( arg, "$args", moreArgs );
+				}
+
+				// ******
 				arg = _trySubstitute( arg, @"$\", toolRunnerDir );
+				arg = _trySubstitute( arg, @"$assets:", assetsDir );
 
 				//
 				// longest first so shorter ones don't interfear
@@ -157,6 +167,14 @@ $file_base_name The name-only portion of the current file, e.g., Document.
 
 			// ******
 			return processedCmds;
+		}
+
+
+		/////////////////////////////////////////////////////////////////////////////
+
+		public List<string> Substitute( InputFile inputFile, string srcPath, string destPath, List<string> extraArgs )
+		{
+			return Substitute( CmdLine, inputFile, srcPath, destPath, extraArgs );
 		}
 
 
@@ -370,7 +388,19 @@ $file_base_name The name-only portion of the current file, e.g., Document.
 						rule.Location = fileName;
 						rule.AssureData( service, fileName );
 					} );
-					rules.AddRange( result );
+
+					//rules.AddRange( result );
+					//
+					// i'm sure i could do this with intersect or join, or linq something-or-other
+					//
+					var newRuleSet = new List<ExtensionRule>( result );
+					foreach( var rule in rules ) {
+						if( null == newRuleSet.Find( r => rule.Id == r.Id ) ) {
+							newRuleSet.Add( rule );
+						}
+					}
+					rules = newRuleSet;
+
 				}
 			}
 			catch( Exception ex ) {

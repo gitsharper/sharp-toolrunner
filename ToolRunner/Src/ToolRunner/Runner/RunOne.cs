@@ -71,7 +71,7 @@ namespace ToolRunner {
 
 		/////////////////////////////////////////////////////////////////////////////
 
-		protected bool TryHandleInternalCmd( string cmdIn, ERCommand erCmd, string content, out string result )
+		protected bool TryHandleInternalCmd( string cmdIn, ERCommand erCmd, InputFile input, out string result )
 		{
 			// ******
 			result = string.Empty;
@@ -81,7 +81,7 @@ namespace ToolRunner {
 			if( !string.IsNullOrEmpty( cmd ) ) {
 				switch( cmd.Trim().ToLower() ) {
 					case "replace":
-						return new Replace( service, input.PathOnly, erCmd ).Process( content, out result );
+						return new Replace( service, input.PathOnly, erCmd ).Process( input, out result );
 				}
 			}
 
@@ -119,7 +119,7 @@ namespace ToolRunner {
 			// ******
 			const string INTERNAL = "internal:";
 			if( execuitable.StartsWith( INTERNAL, StringComparison.OrdinalIgnoreCase ) ) {
-				return TryHandleInternalCmd( execuitable.Substring( INTERNAL.Length ), erCmd, input.Content, out result );
+				return TryHandleInternalCmd( execuitable.Substring( INTERNAL.Length ), erCmd, input, out result );
 			}
 
 			// ******

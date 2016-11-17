@@ -116,7 +116,7 @@
 
 	{
 		"Id": ".nmp4",
-		"note": "Net Macro Processor",
+		"note": "Net Macro Processor v4",
 		"OutputExtension": "",
 		"Commands": [
 			{
@@ -124,7 +124,33 @@
 				"CmdLine": [ "-d:#VSCustomTool=1", "-out:\"$out\"", "\"$in\"" ]
 			}
 		]
+	},
+
+	{
+		"Id": ".nmp",
+		"note": "Net Macro Processor v5",
+		"OutputExtension": "",
+		"Commands": [
+			{
+				"ExecutableName": "nmp.exe",
+				"CmdLine": [ "-d:#VSCustomTool=1", "-out:\"$out\"", "\"$in\"" ]
+			}
+		]
+	},
+
+	{
+		"Id": ".m4",
+		"note": "m4 macro Processor",
+		"OutputExtension": "",
+		"ReadStdOut": true,
+		"Commands": [
+			{
+				"ExecutableName": "m4.exe",
+				"CmdLine": [ "\\\"$in\\\"\"" ]
+			}
+		]
 	}
+
 
 
 

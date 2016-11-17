@@ -114,7 +114,7 @@ namespace CustomTool {
 			//
 			//var runner = new Runner( inputFileName, inputFileContent, vsi, CodeGeneratorProgress );
 			var runner = new Runner( inputFileName, inputFileContent, vsi );
-			if( runner.Generate( out result, out defaultExtension ) ) {
+			if( runner.Generate( true, out result, out defaultExtension ) ) {
 				return result;
 			}
 			else {

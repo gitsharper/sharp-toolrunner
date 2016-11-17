@@ -434,7 +434,7 @@ namespace ToolRunner {
 
 		// http://stackoverflow.com/questions/2477271/concatenate-text-files-with-windows-command-line-dropping-leading-lines
 
-		public bool Generate( out string result, out string outputExt )
+		public bool Generate( bool notifyIfRuleNotFound, out string result, out string outputExt )
 		{
 			// ******
 			result = string.Empty;
@@ -472,7 +472,9 @@ namespace ToolRunner {
 					historyStack.Push( new Tuple<InputFile, ExtensionRule>( currentInput, rule ) );
 
 					if( null == rule ) {
-						NotifyOfErrors( ErrorType.SettingsError, $"could not locate rule for {currentInput.NameWithPath}" );
+						if( notifyIfRuleNotFound ) {
+							NotifyOfErrors( ErrorType.SettingsError, $"could not locate rule for {currentInput.NameWithPath}" );
+						}
 						return false;
 					}
 

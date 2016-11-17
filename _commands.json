@@ -1,0 +1,11 @@
+{
+	"commands": {
+
+		"CopyLocal": {
+			"fileName": "tcc.exe",
+			"workingDirectory": "Custom Tool",
+			"arguments": "/c \"CopyLocal.bat\""
+		}
+
+	}
+}

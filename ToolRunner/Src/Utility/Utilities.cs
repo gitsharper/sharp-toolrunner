@@ -12,13 +12,26 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using System.Threading.Tasks;
+
 
 namespace Utilities {
 
 	/////////////////////////////////////////////////////////////////////////////
 
-	public class Helpers {
+	public static class Helpers {
 
+		public static async void FireAndForget( this Task task )
+		{
+			try {
+				await task;
+			}
+			catch( Exception e ) {
+				// log errors
+			}
+		}
+		
+		
 		/////////////////////////////////////////////////////////////////////////////
 
 		public static string SafeStringFormat( string fmt, params object [] args )
