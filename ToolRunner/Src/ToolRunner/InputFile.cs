@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.IO;
+using System.Threading;
 
 using Utilities;
 
@@ -28,8 +29,7 @@ namespace ToolRunner {
 
 		public string FileNameWithoutExt
 		{
-			get
-			{
+			get {
 				return Path.GetFileNameWithoutExtension( NameWithPath );
 			}
 		}
@@ -55,6 +55,39 @@ namespace ToolRunner {
 
 		/////////////////////////////////////////////////////////////////////////////
 
+		FileStream GetFileStream( string fileName, int tries, int delay = 100 )
+		{
+			// ******
+			var file = new FileInfo( fileName );
+
+			while( true ) {
+				try {
+					var stream = file.Open( FileMode.Open, FileAccess.Read, FileShare.None );
+					return stream;
+				}
+				catch( IOException ex ) when( tries > 0 ) {
+					Thread.Sleep( delay );
+					tries -= 1;
+				}
+			}
+		}
+
+
+		/////////////////////////////////////////////////////////////////////////////
+
+		string ReadFromFile( string filename )
+		{
+			// ******
+			using( var fs = GetFileStream( filename, 10 ) ) {
+				byte [] buffer = new byte [ fs.Length ];
+				fs.Read( buffer, 0, (int) fs.Length );
+				return System.Text.Encoding.UTF8.GetString( buffer );
+			}
+		}
+
+
+		/////////////////////////////////////////////////////////////////////////////
+
 		public InputFile( string inputFileName, string content )
 		{
 			// ******
@@ -73,15 +106,17 @@ namespace ToolRunner {
 			//
 			// if not empty should have ext
 			//
-			Extension = ( Path.GetExtension( inputFileName ) ?? string.Empty ).AssureLeadingDot();
+			Extension = (Path.GetExtension( inputFileName ) ?? string.Empty).AssureLeadingDot();
 
 			// ******
 			if( null == content ) {
 				try {
-					Content = File.ReadAllText( inputFileName );
+					//Content = File.ReadAllText( inputFileName );
+					Content = ReadFromFile( inputFileName );
 				}
-				catch {
+				catch( Exception ex ) {
 					Content = string.Empty;
+					Console.WriteLine( $"InputFile exception: {ex.Message}" );
 				}
 			}
 			else {

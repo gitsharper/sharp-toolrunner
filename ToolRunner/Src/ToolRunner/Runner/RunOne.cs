@@ -93,13 +93,6 @@ namespace ToolRunner {
 
 		/////////////////////////////////////////////////////////////////////////////
 
-		// this all assumes one file in, one file out
-
-		// multi file
-
-		// need directory out NOT file name (multi file output)
-
-
 		public bool Run( ERCommand erCmd, out string result )
 		{
 			// ******
@@ -187,7 +180,7 @@ namespace ToolRunner {
 							}
 
 							//if( success ) {
-								service.NotifyOfSuccess();
+							service.NotifyOfSuccess();
 							//}
 						}
 						else {
@@ -218,7 +211,6 @@ namespace ToolRunner {
 				}
 
 			}
-
 
 			// ******
 			return success;

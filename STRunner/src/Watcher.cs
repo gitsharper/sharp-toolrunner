@@ -11,6 +11,7 @@ using ToolRunner;
 using Utilities;
 
 namespace STRunner {
+	using static Program;
 
 
 	/*
@@ -33,7 +34,50 @@ namespace STRunner {
 		}
 	}
 	
+		
+		http://stackoverflow.com/questions/530211/creating-a-blocking-queuet-in-net/530228#530228
+	
 		*/
+
+
+	/////////////////////////////////////////////////////////////////////////////
+
+	class SizeQueue<T> {
+		private readonly Queue<T> queue = new Queue<T>();
+		private readonly int maxSize;
+		public SizeQueue( int maxSize ) { this.maxSize = maxSize; }
+
+		public void Enqueue( T item )
+		{
+			lock( queue ) {
+				while( queue.Count >= maxSize ) {
+					Monitor.Wait( queue );
+				}
+				queue.Enqueue( item );
+				if( queue.Count == 1 ) {
+					// wake up any blocked dequeue
+					Monitor.PulseAll( queue );
+				}
+			}
+		}
+		public T Dequeue()
+		{
+			lock( queue ) {
+				while( queue.Count == 0 ) {
+					Monitor.Wait( queue );
+				}
+				T item = queue.Dequeue();
+				if( queue.Count == maxSize - 1 ) {
+					// wake up any blocked enqueue
+					Monitor.PulseAll( queue );
+				}
+				return item;
+			}
+		}
+	}
+
+
+
 	/////////////////////////////////////////////////////////////////////////////
 
 	public class Watcher {
@@ -41,38 +85,35 @@ namespace STRunner {
 		FileSystemWatcher watcher = new FileSystemWatcher();
 		string directory;
 		string file;
+		List<string> watchExts;
 
+		SizeQueue<string> queue = new SizeQueue<string>( 8192 );
 
-		/////////////////////////////////////////////////////////////////////////////
-#pragma warning disable 1998
-
-		protected async Task HandleFile( string path )
-		{
-			var runner = new Runner( path ) { };
-			string result;
-			string outExt;
-			runner.Generate( false, out result, out outExt );
-		}
-
-#pragma warning restore 1998
 
 		/////////////////////////////////////////////////////////////////////////////
 
 		protected void OnFileChanged( object source, FileSystemEventArgs e )
 		{
-			//TVWindow.Dispatcher.BeginInvoke(
-			//	System.Windows.Threading.DispatcherPriority.Normal,
-			//	(ThreadStart) delegate {
-			//		Thread.Sleep( 600 );
-			//		LoadFileText();
-			//		TVWindow.ReloadTextBlock();
-			//	}///textBlock.Text = TextFileText; }
-			//);
-
-			//Task.Run( DoStuff );
-
+			// ******
 			if( WatcherChangeTypes.Changed == e.ChangeType ) {
-				HandleFile( e.FullPath ).FireAndForget();
+
+				// ******
+				if( null == file && watchExts.Count > 0 ) {
+					var ext = Path.GetExtension( e.FullPath );
+					if( string.IsNullOrEmpty( ext ) ) {
+						return;
+					}
+					//
+					// skip dot
+					//
+					ext = ext.Substring( 1 );
+					if( null == watchExts.Find( s => s == ext ) ) {
+						return;
+					}
+				}
+
+				// ******
+				queue.Enqueue( e.FullPath );
 			}
 		}
 
@@ -84,27 +125,40 @@ namespace STRunner {
 			// ******
 			watcher.Changed += new FileSystemEventHandler( OnFileChanged );
 			watcher.Created += new FileSystemEventHandler( OnFileChanged );
-			watcher.Deleted += new FileSystemEventHandler( OnFileChanged );
+			//watcher.Deleted += new FileSystemEventHandler( OnFileChanged );
 
 			// ******
 			watcher.EnableRaisingEvents = false;
+			{
+				watcher.Path = directory;
+				watcher.Filter = file ?? "*.*";
 
-			watcher.Path = directory;
-			watcher.Filter = file ?? "*.*";
-
+				// ******
+				WriteMessage( $"SharpToolRunner running in directory watch mode" );
+				WriteMessage( $"start time: {DateTime.Now}" );
+				WriteMessage( $"terminate the program to stop watching" );
+			}
 			watcher.EnableRaisingEvents = true;
 
 			// ******
-			// no
-			//await Task.Delay( -1 );
+			while( true ) {
+				var path = queue.Dequeue();
 
-			Thread.Sleep( -1 );
+				Console.WriteLine( $"begin HandleFile: {path}" );
+				{
+					string result;
+					string outExt;
+					var runner = new Runner( path ) { };
+					runner.Generate( false, out result, out outExt );
+				}
+				WriteMessage( $"end HandleFile: {path}" );
+			}
 		}
 
 
 		/////////////////////////////////////////////////////////////////////////////
 
-		public Watcher( string pathIn )
+		public Watcher( string pathIn, List<string> extsToWatch )
 		{
 			// ******
 			var path = Path.GetFullPath( pathIn );
@@ -118,6 +172,14 @@ namespace STRunner {
 			}
 			else {
 				throw new ArgumentException( $"{nameof( path )} does not exist as a directory or full file path" );
+			}
+
+			watchExts = extsToWatch ?? new List<string> { };
+			if( watchExts.Count > 0 ) {
+				if( !string.IsNullOrEmpty( file ) ) {
+					Program.WriteMessage( $"watching a list of file extensions takes precidence over watching for a spcific file, the file \"{file}\" will be ignored" );
+					file = null;
+				}
 			}
 		}
 

@@ -123,6 +123,19 @@ namespace STRunner {
 
 
 		/////////////////////////////////////////////////////////////////////////////
+
+		static List<string> WatcherFileExts = new List<string> { };
+
+		static void SetWatcherFileExts( string exts )
+		{
+			if( string.IsNullOrWhiteSpace( exts ) ) {
+				Die( $"invalid file watch extensions: {exts}" );
+			}
+			var items = exts.Replace( ".", "" ).Split( new char [] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries );
+			WatcherFileExts = items.ToList();
+		}
+
+		/////////////////////////////////////////////////////////////////////////////
 		/// <summary>
 		/// processes commands to extract tokens and secrets
 		/// </summary>
@@ -165,7 +178,7 @@ namespace STRunner {
 
 						case "w":
 						case "watch":
-							new Watcher( value ).Run();
+							new Watcher( value, WatcherFileExts ).Run();
 							Environment.Exit( 0 );
 							break;
 
@@ -239,30 +252,10 @@ namespace STRunner {
 
 				// ******
 				bool cmdHandled = true;
-				switch( cmd ) {
-					//case "pin":
-					//	accessData.ForcePinAuth = true;
-					//	break;
-					//
-					//case "consumerToken":
-					//	if( !haveConsumerTokenAndSecret ) {
-					//		accessData.ConsumerToken = value;
-					//	}
-					//	break;
-					//
-					//case "consumerSecret":
-					//	if( !haveConsumerTokenAndSecret ) {
-					//		accessData.ConsumerSecret = value;
-					//	}
-					//	break;
-					//
-					//case "userAccessToken":
-					//	accessData.UserAccessToken = value;
-					//	break;
-					//
-					//case "userAccessSecret":
-					//	accessData.UserAccessSecret = value;
-					//	break;
+				switch( cmd.ToLower() ) {
+					case "watchexts":
+						SetWatcherFileExts( value );
+						break;
 
 					default:
 						cmdHandled = false;

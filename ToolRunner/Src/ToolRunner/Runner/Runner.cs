@@ -183,154 +183,6 @@ namespace ToolRunner {
 			return Path.Combine( tempDir, fileName );
 		}
 
-		//		/////////////////////////////////////////////////////////////////////////////
-		//
-		//		string AddFilesToProject()
-		//		{
-		//			// ******
-		//			//			var allPossibleFiles = GetPossibleFileNames( inputFileName );
-		//			//			var filesThatExist = DiscoverGeneratedFiles( inputFileName );
-		//			//			var filesThatDontExist = allPossibleFiles.Except( filesThatExist );
-		//
-		//			//	// ******
-		//			//	if( null != vsi ) {
-		//			//		vsi.AddFilesToProject( filesThatExist, null );
-		//			//		vsi.RemoveFilesFromProject( filesThatDontExist );
-		//			//	}
-		//
-		//			// ******
-		//			var sb = new StringBuilder { };
-		//
-		//			//	sb.Append( "Files that are in, or have just been added to project:\r\n" );
-		//			//	foreach( var name in filesThatExist ) {
-		//			//		sb.AppendFormat( "{0}\r\n", name );
-		//			//	}
-		//			//
-		//			//	sb.Append( "Files that have been removed from the project:\r\n" );
-		//			//	foreach( var name in filesThatDontExist ) {
-		//			//		sb.AppendFormat( "{0}\r\n", name );
-		//			//	}
-		//
-		//			// ******
-		//			return sb.ToString();
-		//		}
-		//
-		//
-		//		/////////////////////////////////////////////////////////////////////////////
-		//
-		//		List<string> GetPossibleFileNames( InputFile srcFile, IEnumerable<string> resultFiles )
-		//		{
-		//			// ******
-		//			var list = new List<string> { };
-		//			if( null == resultFiles || 0 == resultFiles.Count() ) {
-		//				return list;
-		//			}
-		//
-		//			// ******
-		//			var path = srcFile.PathOnly;
-		//			var fileNameOnly = srcFile.NameWithoutExt;
-		//
-		//			foreach( var item in resultFiles ) {
-		//				if( string.IsNullOrWhiteSpace( item ) ) {
-		//					continue;
-		//				}
-		//
-		//				// ******
-		//				var name = '*' == item [ 0 ] ? fileNameOnly + item.Substring( 1 ) : item;
-		//				list.Add( Path.Combine( path, name ) );
-		//			}
-		//
-		//			// ******
-		//			return list;
-		//		}
-		//
-		//
-		//		/////////////////////////////////////////////////////////////////////////////
-		//
-		//		void DeleteFiles( List<string> files )
-		//		{
-		//			foreach( var file in files ) {
-		//				try {
-		//					if( File.Exists( file ) ) {
-		//						File.Delete( file );
-		//					}
-		//				}
-		//				catch {
-		//				}
-		//			}
-		//		}
-		//
-		//
-		//		/////////////////////////////////////////////////////////////////////////////
-		//
-		//		List<string> DiscoverGeneratedFiles( InputFile srcFile, IEnumerable<string> resultFiles )
-		//		{
-		//			// ******
-		//			var possibleFilePaths = GetPossibleFileNames( srcFile, resultFiles );
-		//			var foundFiles = new List<string> { };
-		//
-		//			foreach( var filePath in possibleFilePaths ) {
-		//				if( File.Exists( filePath ) ) {
-		//					foundFiles.Add( filePath );
-		//				}
-		//			}
-		//
-		//			// ******
-		//			return foundFiles;
-		//		}
-		//
-		//
-		//		/////////////////////////////////////////////////////////////////////////////
-		//
-		//		List<string> RenameFilesForBackup( List<string> files )
-		//		{
-		//			// ******
-		//			var renamedFiles = new List<string> { };
-		//
-		//			foreach( var fileName in files ) {
-		//				var tempFileName = fileName + ".backup";
-		//				renamedFiles.Add( tempFileName );
-		//
-		//				try {
-		//					if( File.Exists( tempFileName ) ) {
-		//						File.Delete( tempFileName );
-		//					}
-		//				}
-		//				catch {
-		//				}
-		//
-		//				File.Move( fileName, tempFileName );
-		//			}
-		//
-		//			// ******
-		//			return renamedFiles;
-		//		}
-		//
-		//
-		//		/////////////////////////////////////////////////////////////////////////////
-		//
-		//		void RestoreFilesFromBackup( List<string> files )
-		//		{
-		//			// ******
-		//			foreach( var fileName in files ) {
-		//				var restoredFileName = Path.Combine( Path.GetDirectoryName( fileName ), Path.GetFileNameWithoutExtension( fileName ) );
-		//				try {
-		//					if( File.Exists( restoredFileName ) ) {
-		//
-		//						// ?????
-		//
-		//						File.Delete( restoredFileName );
-		//					}
-		//					if( File.Exists( fileName ) ) {
-		//						File.Move( fileName, restoredFileName );
-		//					}
-		//				}
-		//				catch {
-		//
-		//				}
-		//			}
-		//		}
-
 
 		/////////////////////////////////////////////////////////////////////////////
 
@@ -416,7 +268,7 @@ namespace ToolRunner {
 					// beneath the source file - children of the source file
 					//
 					// note this will only work if running as a custom tool under visual studio, the
-					// command line took just ignores the request
+					// command line tool just ignores the request
 					//
 					ResultFilesHelper.AddFilesToProject( input, rule.ResultFiles, Service );
 				}
@@ -495,6 +347,11 @@ namespace ToolRunner {
 						return false;
 					}
 
+					// ******
+					//
+					// this will normally be true for the command line version of STR and false for
+					// the visual studio tool (single file generator)
+					//
 					if( SaveOutput ) {
 						WriteFile( currentInput, outputExt, result );
 					}
@@ -520,6 +377,7 @@ namespace ToolRunner {
 						}
 					}
 
+					// ******
 					//
 					// new InputFile instance where file name includes the output ext from the previous
 					// run
@@ -536,7 +394,7 @@ namespace ToolRunner {
 
 		/////////////////////////////////////////////////////////////////////////////
 		/// <summary>
-		/// Ctor when not running under Visual Studio, automatically save file to
+		/// Ctor when NOT running under Visual Studio, automatically save file to
 		/// output. To defeat this behaviour set SaveOutput to false
 		/// </summary>
 		/// <param name="inputFileName"></param>
@@ -549,6 +407,13 @@ namespace ToolRunner {
 
 
 		/////////////////////////////////////////////////////////////////////////////
+		/// <summary>
+		/// Ctor when running as a single file generator under visual studio as a
+		/// custom tool.
+		/// </summary>
+		/// <param name="inputFileName"></param>
+		/// <param name="inputFileContent"></param>
+		/// <param name="service"></param>
 
 		public Runner( string inputFileName, string inputFileContent, IExtSvcProvider service )
 		{
