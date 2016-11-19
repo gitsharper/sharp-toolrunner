@@ -62,7 +62,7 @@ namespace ToolRunner {
 
 			while( true ) {
 				try {
-					var stream = file.Open( FileMode.Open, FileAccess.Read, FileShare.None );
+					var stream = file.Open( FileMode.Open, FileAccess.ReadWrite, FileShare.None );
 					return stream;
 				}
 				catch( IOException ex ) when( tries > 0 ) {

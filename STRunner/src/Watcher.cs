@@ -135,6 +135,7 @@ namespace STRunner {
 
 				// ******
 				WriteMessage( $"SharpToolRunner running in directory watch mode" );
+				WriteMessage( $"directory: {directory}" );
 				WriteMessage( $"start time: {DateTime.Now}" );
 				WriteMessage( $"terminate the program to stop watching" );
 			}
@@ -161,6 +162,10 @@ namespace STRunner {
 		public Watcher( string pathIn, List<string> extsToWatch )
 		{
 			// ******
+			if( string.IsNullOrEmpty( pathIn ) ) {
+				pathIn = Directory.GetCurrentDirectory();
+			}
+
 			var path = Path.GetFullPath( pathIn );
 			if( File.Exists( path ) ) {
 				directory = Path.GetDirectoryName( path );

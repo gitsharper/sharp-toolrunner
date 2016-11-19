@@ -11,6 +11,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{C321FA
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomTool", "Custom Tool\CustomTool.csproj", "{DAFB165B-E60A-47AE-AB3C-9F2DD455C46F}"
+	ProjectSection(ProjectDependencies) = postProject
+		{F7FFD763-3AE7-4DD2-B921-377DFF8B109B} = {F7FFD763-3AE7-4DD2-B921-377DFF8B109B}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".node", ".node", "{20AADEBC-0727-4B0F-9468-CD63F8704CB3}"
 EndProject
@@ -18,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToolRunner", "ToolRunner\To
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{482E1F4A-AAC1-4A17-9335-437C747DDBF2}"
 	ProjectSection(SolutionItems) = preProject
+		commands.json = commands.json
+		CopyLocal.bat = CopyLocal.bat
 		DeadCode.ruleset = DeadCode.ruleset
 	EndProjectSection
 EndProject
