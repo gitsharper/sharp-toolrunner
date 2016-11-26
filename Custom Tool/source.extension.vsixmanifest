@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
 	<Metadata>
-		<Identity Id="Sharp-CustomTool.5eac6d67-2554-4879-927a-8601899d9067" Version="1.1" Language="en-US" Publisher="joe mclain" />
+		<Identity Id="Sharp-CustomTool.5eac6d67-2554-4879-927a-8601899d9067" Version="1.1.2" Language="en-US" Publisher="joe mclain" />
 		<DisplayName>Sharp-ToolRunner</DisplayName>
 		<Description xml:space="preserve">Sharp-ToolRunner (STR) is a Visual Studio add-in that allows you to transform one file type into another file type; in Visual Studio parlance it's a "single file generator".</Description>
 		<MoreInfo>https://github.com/gitsharper/sharp-toolrunner</MoreInfo>
@@ -21,7 +21,7 @@
 		<Dependency Id="Microsoft.Framework.NDP" DisplayName="Microsoft .NET Framework" d:Source="Manual" Version="[4.5,)" />
 	</Dependencies>
 	<Assets>
-		<Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="Project" d:ProjectName="%CurrentProject%" Path="|%CurrentProject%;PkgdefProjectOutputGroup|" />
+		<Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="Project" d:ProjectName="%CurrentProject%" Path="|%CurrentProject%;PkgdefProjectOutputGroup|" d:VsixSubPath="SharpToolRunner" />
 	</Assets>
 	<Prerequisites>
 		<Prerequisite Id="Microsoft.VisualStudio.Component.CoreEditor" Version="[15.0.25904.2,16.0)" DisplayName="Visual Studio core editor" />
