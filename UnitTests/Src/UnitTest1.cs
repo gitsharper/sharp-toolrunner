@@ -66,7 +66,7 @@ namespace UnitTests {
 
 			string result;
 			string outExt;
-			runner.Generate( out result, out outExt );
+			runner.Generate( true, out result, out outExt );
 
 			//Assert.True( TestNormalizeString( result ).StartsWith( "varVector=(function(){" ) );
 		}
@@ -180,7 +180,7 @@ namespace UnitTests {
 
 			string result;
 			string outExt;
-			runner.Generate( out result, out outExt );
+			runner.Generate( true, out result, out outExt );
 			Assert.True( TestNormalizeString( result ).StartsWith( "varVector=(function(){" ) );
 		}
 
@@ -197,7 +197,7 @@ namespace UnitTests {
 
 			string result;
 			string outExt;
-			runner.Generate( out result, out outExt );
+			runner.Generate( true, out result, out outExt );
 			Assert.Equal( "Fred is dead", result );
 		}
 
@@ -214,7 +214,7 @@ namespace UnitTests {
 
 			string result;
 			string outExt;
-			runner.Generate( out result, out outExt );
+			runner.Generate( true, out result, out outExt );
 			Assert.True( result.StartsWith( "<!DOCTYPE html>" ) );
 			Assert.Equal( ".html", outExt );
 		}
@@ -232,7 +232,7 @@ namespace UnitTests {
 
 			string result;
 			string outExt;
-			runner.Generate( out result, out outExt );
+			runner.Generate( true, out result, out outExt );
 			Assert.Equal( "Fred is sometimes dead", result.Trim() );
 			Assert.Equal( ".copied", outExt );
 		}
@@ -250,7 +250,7 @@ namespace UnitTests {
 
 			string result;
 			string outExt;
-			runner.Generate( out result, out outExt );
+			runner.Generate( true, out result, out outExt );
 			Assert.Equal( "Fred is sometimes dead", result.Trim() );
 			Assert.Equal( ".txt", outExt );
 		}
@@ -268,7 +268,7 @@ namespace UnitTests {
 
 			string result;
 			string outExt;
-			runner.Generate( out result, out outExt );
+			runner.Generate( true, out result, out outExt );
 			Assert.Equal( "Fred is dead", result.Trim() );
 			Assert.Equal( ".txt", outExt );
 		}
@@ -286,7 +286,7 @@ namespace UnitTests {
 
 			string result;
 			string outExt;
-			runner.Generate( out result, out outExt );
+			runner.Generate( true, out result, out outExt );
 			Assert.Equal( "Fred is dead", result );
 		}
 
@@ -303,7 +303,7 @@ namespace UnitTests {
 
 			string result;
 			string outExt;
-			runner.Generate( out result, out outExt );
+			runner.Generate( true, out result, out outExt );
 			Assert.Equal( string.Empty, result );
 		}
 
@@ -320,7 +320,7 @@ namespace UnitTests {
 
 			string result;
 			string outExt;
-			bool success = runner.Generate( out result, out outExt );
+			bool success = runner.Generate( true, out result, out outExt );
 
 			Assert.False( success );
 			Assert.Equal( string.Empty, result );
@@ -339,7 +339,7 @@ namespace UnitTests {
 
 			string result;
 			string outExt;
-			runner.Generate( out result, out outExt );
+			runner.Generate( true, out result, out outExt );
 
 			var normalized = TestNormalizeString( result );
 			Assert.Equal( "body{background:blue;}", normalized );

@@ -46,7 +46,7 @@ namespace ToolRunner {
 
 		/////////////////////////////////////////////////////////////////////////////
 
-		static string ReadNmpOutputFile( string path )
+		static string ReadOutputFile( string path )
 		{
 			return File.ReadAllText( path );
 		}
@@ -130,7 +130,8 @@ namespace ToolRunner {
 			// ******
 			bool success = false;
 			var bareFileName = input.NameWithoutExt;
-			var cmdInputFile = GetTempFilePath( bareFileName );
+			//var cmdInputFile = GetTempFilePath( bareFileName );
+			var cmdInputFile = GetTempFilePath( input.NameWithExt );
 			var cmdOutputFile = GetFilePath( bareFileName, ".out.txt" );
 
 			try {
@@ -173,9 +174,12 @@ namespace ToolRunner {
 								result = exeResult.StdOut;
 							}
 							else if( File.Exists( cmdOutputFile ) ) {
-								result = ReadNmpOutputFile( cmdOutputFile );
+								result = ReadOutputFile( cmdOutputFile );
 							}
 							else {
+
+								// ?? expected output, shouldn't this be an error ??
+
 								result = null;
 							}
 

@@ -56,10 +56,24 @@ namespace ToolRunner {
 
 		/////////////////////////////////////////////////////////////////////////////
 
+		ERules _rules;
+
+		//
+		// this is called by the debugger if it has to populate a display of
+		// Runner properties (or refresh them) - so the retreval of rules will occur if 'inputFileName'
+		// is not empty at the time
+		//
+
 		public ERules Rules
 		{
 			get {
-				return new ERules( Path.GetDirectoryName( inputFileName ), Service );
+				if( null == _rules ) {
+					if( string.IsNullOrEmpty( inputFileName ) ) {
+						throw new Exception( $"\"{nameof( inputFileName )}\" must be set before calling 'Rules'" );
+					}
+					_rules = new ERules( Path.GetDirectoryName( inputFileName ), Service );
+				}
+				return _rules;
 			}
 		}
 
@@ -278,7 +292,7 @@ namespace ToolRunner {
 			}
 
 			// ******
-			return true;
+			return generateSuccess;
 		}
 
 
@@ -312,7 +326,8 @@ namespace ToolRunner {
 			// FilePath is used as the start point to discover config files
 			//
 			currentInput = initialInput;
-			var rules = new ERules( currentInput.PathOnly, Service );
+			//var rules = new ERules( currentInput.PathOnly, Service );
+			var rules = Rules;
 
 			// ******
 			var startDir = Directory.GetCurrentDirectory();
