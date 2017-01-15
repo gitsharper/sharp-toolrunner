@@ -414,8 +414,8 @@ namespace ToolRunner {
 		/// </summary>
 		/// <param name="inputFileName"></param>
 
-		public Runner( string inputFileName )
-			: this( inputFileName, null, null )
+		public Runner( string inputFileName, IExtSvcProvider service = null )
+			: this( inputFileName, null, service )
 		{
 			SaveOutput = true;
 		}
