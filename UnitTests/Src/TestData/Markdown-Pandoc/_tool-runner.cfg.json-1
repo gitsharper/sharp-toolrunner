@@ -1,0 +1,16 @@
+﻿[
+
+	{
+		"Id": ".md",
+		"note": "using pandoc converte markdown to docx",
+		"OutputExtension": ".docx",
+		"Commands": [
+			{
+				"Action" : "RunOnly",
+				"ExecutableName": "cmd.exe",
+				"CmdLine": [ "/C", "pandoc.exe", "\"$in\"", "-f markdown -t docx", "-o \"$file_path\\$file_base_name.docx\"" ]
+			}
+		]
+	}
+
+]

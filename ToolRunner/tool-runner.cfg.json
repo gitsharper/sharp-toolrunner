@@ -1,52 +1,5 @@
 ﻿[
 	{
-		"Id": ".g4",
-		"note": "Antlr4 tool, C# target",
-		"OutputExtension": "",
-		"SaveIntermediateFiles": false,
-
-		"ResultFiles": [
-			"*.tokens",
-			"*Parser.cs",
-			"*Lexer.cs",
-			"*Lexer.tokens",
-			"*BaseListener.cs",
-			"*Listener.cs",
-			"*BaseVisitor.cs",
-			"*Visitor.cs"
-		],
-
-		"SaveRestoreResultFiles": true,
-		"VSAddResultFiles": true,
-
-		"Commands": [
-			{
-				"ExecutableName": "java.exe",
-				"AllowNoOutput": true,
-				"CmdLine": [
-					"-jar \"c:\\Program Files\\Antlr4\\antlr-4.5.3-complete.jar\"",
-					"-o \"$file_path\"",
-					"-message-format vs2005",
-					"-Dlanguage=CSharp",
-					"\"$in\""
-				]
-			}
-
-		]
-	},
-	{
-		"Id": ".less",
-		"note": "less compiler",
-		"OutputExtension": "css",
-		"Commands": [
-			{
-				"ExecutableName": "cmd.exe",
-				"CmdLine": [ "/C", "lessc.cmd", "-no-color", "\"$in\"", "\"$out\"" ]
-			}
-		]
-	},
-
-	{
 		"Id": ".md",
 		"note": "marked, insert in html file",
 		"OutputExtension": ".html",
@@ -110,6 +63,54 @@
 			{
 				"ExecutableName": "cmd.exe",
 				"CmdLine": [ "/C", "tsc.cmd", "--out \"$out\"", "\"$in\"" ]
+			}
+		]
+	},
+
+	{
+		"Id": ".g4",
+		"note": "Antlr4 tool, C# target",
+		"OutputExtension": "",
+		"SaveIntermediateFiles": false,
+
+		"ResultFiles": [
+			"*.tokens",
+			"*Parser.cs",
+			"*Lexer.cs",
+			"*Lexer.tokens",
+			"*BaseListener.cs",
+			"*Listener.cs",
+			"*BaseVisitor.cs",
+			"*Visitor.cs"
+		],
+
+		"SaveRestoreResultFiles": true,
+		"VSAddResultFiles": true,
+
+		"Commands": [
+			{
+				"ExecutableName": "java.exe",
+				"AllowNoOutput": true,
+				"CmdLine": [
+					"-jar \"c:\\Program Files\\Antlr4\\antlr-4.5.3-complete.jar\"",
+					"-o \"$file_path\"",
+					"-message-format vs2005",
+					"-Dlanguage=CSharp",
+					"\"$in\""
+				]
+			}
+
+		]
+	},
+
+	{
+		"Id": ".less",
+		"note": "less compiler",
+		"OutputExtension": "css",
+		"Commands": [
+			{
+				"ExecutableName": "cmd.exe",
+				"CmdLine": [ "/C", "lessc.cmd", "-no-color", "\"$in\"", "\"$out\"" ]
 			}
 		]
 	},

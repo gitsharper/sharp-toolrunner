@@ -15,10 +15,12 @@ namespace UnitTests {
 			var test = new UnitTest1 {};
 			test.ProgramInvoked = true;
 
+			test.PandocTest1();
+
 			//test.InitializeTest();
 
 			//test.RunLess();
-			test.RunLessError1();
+			//test.RunLessError1();
 
 			//test.RunNmp();
 			//test.RunNmpError1();
@@ -35,7 +37,7 @@ namespace UnitTests {
 			//test.TypescriptTest1();
 
 			//test.Antlr4Test1();
-    }
+		}
 
 	}
 }

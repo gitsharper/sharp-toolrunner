@@ -136,24 +136,14 @@ namespace ToolRunner {
 			var filesThatDontExist = allPossibleFiles.Except( filesThatExist );
 
 			// ******
+			//
+			// add to project
+			//
 			service.AddFilesToProject( filesThatExist );
+			//
+			// remove from project
+			//
 			service.RemoveFilesFromProject( filesThatDontExist );
-
-			//// ******
-			//var sb = new StringBuilder { };
-			//
-			//sb.Append( "Files that are in, or have just been added to project:\r\n" );
-			//foreach( var name in filesThatExist ) {
-			//	sb.AppendFormat( "  {0}\r\n", name );
-			//}
-			//
-			//sb.Append( "Files that have been removed from the project:\r\n" );
-			//foreach( var name in filesThatDontExist ) {
-			//	sb.AppendFormat( "  {0}\r\n", name );
-			//}
-			//
-			//// ******
-			//return sb.ToString();
 		}
 
 

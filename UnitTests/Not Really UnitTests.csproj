@@ -73,8 +73,28 @@
     <None Include="packages.config" />
     <None Include="Src\TestData\Antlr4\parameters.g4" />
     <None Include="Src\TestData\Antlr4\tool-runner.cfg.json" />
+    <None Include="Src\TestData\Chaining\Cmd-As-File-Name.copied" />
+    <None Include="Src\TestData\Chaining\cmd-as-file-name.nmpx" />
+    <None Include="Src\TestData\Chaining\Cmd1.nmpx" />
+    <None Include="Src\TestData\Chaining\tool-runner.cfg.json" />
     <None Include="Src\TestData\Less\Less1.less" />
     <None Include="Src\TestData\Less\LessError1.less" />
+    <None Include="Src\TestData\Markdown-Pandoc\test1.docx" />
+    <None Include="Src\TestData\Markdown-Pandoc\Test1.md" />
+    <None Include="Src\TestData\Markdown-Pandoc\tool-runner.cfg.json" />
+    <None Include="Src\TestData\Markdown-Pandoc\VS Test 1">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>VS Test 1.md</DependentUpon>
+    </None>
+    <None Include="Src\TestData\Markdown-Pandoc\VS Test 1.docx">
+      <DependentUpon>VS Test 1.md</DependentUpon>
+    </None>
+    <None Include="Src\TestData\Markdown-Pandoc\VS Test 1.md">
+      <Generator>SharpToolRunner</Generator>
+      <LastGenOutput>VS Test 1</LastGenOutput>
+    </None>
+    <None Include="Src\TestData\Markdown-Pandoc\_tool-runner.cfg.json-1" />
     <None Include="Src\TestData\MdReplace\simple.outer-html" />
     <None Include="Src\TestData\MdReplace\Test1.md" />
     <None Include="Src\TestData\MdReplace\tool-runner.cfg.json" />
@@ -99,6 +119,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Src\TestData\Chaining\Cmd-As-File-Name.txt" />
     <Content Include="Src\TestData\Typescript\raytracer.html" />
   </ItemGroup>
   <ItemGroup>

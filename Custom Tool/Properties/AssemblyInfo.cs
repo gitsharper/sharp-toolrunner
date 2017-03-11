@@ -11,7 +11,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration( "" )]
 [assembly: AssemblyCompany( "" )]
 [assembly: AssemblyProduct( "Sharper-ToolRunner" )]
-[assembly: AssemblyCopyright( "Copyright © Joe McLain 2015" )]
+[assembly: AssemblyCopyright( "Copyright © 2015-2017 Joe McLain" )]
 [assembly: AssemblyTrademark( "" )]
 [assembly: AssemblyCulture( "" )]
 

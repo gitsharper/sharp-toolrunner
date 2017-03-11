@@ -1,0 +1,24 @@
+﻿[
+
+	{
+		"Id": ".md",
+		"note": "using pandoc convert markdown to docx, add docx as child of input file",
+		"OutputExtension": "",
+
+		"ResultFiles": [
+			"*.docx"
+		],
+
+		"SaveRestoreResultFiles": true,
+		"VSAddResultFiles": true,
+
+		"Commands": [
+			{
+				"Action" : "RunOnly",
+				"ExecutableName": "pandoc.exe",
+				"CmdLine": [ "\"$in\"", "-f markdown -t docx", "-o \"$file_path\\$file_base_name.docx\"" ]
+			}
+		]
+	}
+
+]

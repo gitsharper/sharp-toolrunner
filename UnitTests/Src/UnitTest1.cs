@@ -46,6 +46,26 @@ namespace UnitTests {
 		}
 
 
+		/////////////////////////////////////////////////////////////////////////////
+		//
+		//
+		//
+		/////////////////////////////////////////////////////////////////////////////
+
+		[Fact]
+		public void PandocTest1()
+		{
+			// ******
+			var dataFilePath = GetDataFilePath( "markdown-pandoc\\test1.md" );
+			var runner = new Runner( dataFilePath ) { };
+			Assert.NotNull( runner );
+
+			var rules = runner.Rules;
+
+			runner.Generate( true, out string result, out string outExt );
+			Assert.Null( result );
+			Assert.Equal( "", outExt );
+		}
 
 
 		/////////////////////////////////////////////////////////////////////////////
@@ -64,9 +84,7 @@ namespace UnitTests {
 
 			var rules = runner.Rules;
 
-			string result;
-			string outExt;
-			runner.Generate( true, out result, out outExt );
+			runner.Generate( true, out string result, out string outExt );
 
 			//Assert.True( TestNormalizeString( result ).StartsWith( "varVector=(function(){" ) );
 		}
@@ -74,21 +92,19 @@ namespace UnitTests {
 
 		/////////////////////////////////////////////////////////////////////////////
 
-		[Fact]
-		public void FindResultFilesTest1()
-		{
-			// ******
-			var dataFilePath = GetDataFilePath( "antlr4\\parameters.g4" );
-			var runner = new Runner( dataFilePath ) { };
-			Assert.NotNull( runner );
-
-			var rules = runner.Rules;
-
-			//string result;
-			//string outExt;
-			//runner.Generate( out result, out outExt );
-			//Assert.True( TestNormalizeString( result ).StartsWith( "varVector=(function(){" ) );
-		}
+		//[Fact]
+		//public void FindResultFilesTest1()
+		//{
+		//	// ******
+		//	var dataFilePath = GetDataFilePath( "antlr4\\parameters.g4" );
+		//	var runner = new Runner( dataFilePath ) { };
+		//	Assert.NotNull( runner );
+		//
+		//	var rules = runner.Rules;
+		//
+		//	runner.Generate( true, out string result, out string outExt );
+		//	//Assert.True( TestNormalizeString( result ).StartsWith( "varVector=(function(){" ) );
+		//}
 
 
 		/////////////////////////////////////////////////////////////////////////////

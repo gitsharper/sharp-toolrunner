@@ -140,7 +140,8 @@ For an Antlr4 grammar file named "parser.g4":
 			}
 
 		]
-	}```
+	}
+```
 
 #### .less (less compiler)
 
