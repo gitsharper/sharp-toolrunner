@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 //using EnvDTE;
 
 
@@ -42,30 +44,30 @@ namespace ToolRunner {
 
 
 	/////////////////////////////////////////////////////////////////////////////
-	
+
 	public class Service : IExtSvcProvider {
 
 		public const string Newline = "\r\n";
 
-		public string SolutionFullNameAndPath { get; } = string.Empty;
-		public string ProjectFullNameAndPath { get; } = string.Empty;
-		
+		public string SolutionFullNameAndPath { get; private set; } = string.Empty;
+		public string ProjectFullNameAndPath { get; private set; } = string.Empty;
+
 		public ErrorNotifier NotifyOfErrors { get; set; }
 		public SuccessNotifier NotifyOfSuccess { get; set; }
 
 
 		/////////////////////////////////////////////////////////////////////////////
-		
+
 		public void AddFilesToProject( IEnumerable<string> paths )
 		{
 			//foreach( var path in paths) {
 			//	OutputToWindow( $"request: add file to project \"{path}\"" );
-   //   }
+			//   }
 		}
 
 
 		/////////////////////////////////////////////////////////////////////////////
-		
+
 		public void RemoveFilesFromProject( IEnumerable<string> paths )
 		{
 			//foreach( var path in paths ) {
@@ -87,7 +89,7 @@ namespace ToolRunner {
 		public void SendError( string fileName, string errorText, int line, int column )
 		{
 			Console.WriteLine( $"error: {fileName}{Newline}{errorText}{Newline}line {line}, column {column}" );
-    }
+		}
 
 
 		/////////////////////////////////////////////////////////////////////////////
@@ -111,6 +113,49 @@ namespace ToolRunner {
 		public void OutputToWindow( string fmt, params object [] args )
 		{
 			Console.WriteLine( fmt, args );
+		}
+
+
+		/////////////////////////////////////////////////////////////////////////////
+
+		void LocateFileOfType( string startPath, string targetFiles, Action<string> assignTo )
+		{
+			var pathInfo = Directory.GetParent( startPath + '\\' );
+			var root = pathInfo.Root;
+
+			while( pathInfo.FullName != root.FullName ) {
+				var matchedFiles = Directory.GetFiles( pathInfo.FullName, targetFiles );
+
+				if( matchedFiles.Length > 0 ) {
+					var first = matchedFiles.FirstOrDefault();
+					if( null != first ) {
+						assignTo( first );
+						return;
+					}
+				}
+
+				// ******
+				pathInfo = pathInfo.Parent;
+			}
+		}
+
+
+		/////////////////////////////////////////////////////////////////////////////
+
+		public Service( string inputFileName, string projectType = "" )
+		{
+			// ******
+			if( string.IsNullOrWhiteSpace( inputFileName ) ) {
+				return;
+			}
+
+			// ******
+			var path = Path.GetDirectoryName( inputFileName );
+
+			LocateFileOfType( path, string.IsNullOrWhiteSpace(projectType) ? "*.*proj" :$"*.{projectType}", s => ProjectFullNameAndPath = s );
+			LocateFileOfType( path, "*.sln", s => SolutionFullNameAndPath = s );
+
+
 		}
 
 

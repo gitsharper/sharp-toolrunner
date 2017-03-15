@@ -414,9 +414,14 @@ namespace ToolRunner {
 		/// </summary>
 		/// <param name="inputFileName"></param>
 
-		public Runner( string inputFileName, IExtSvcProvider service = null )
-			: this( inputFileName, null, service )
+		public Runner( string inputFileName, string projectExt = "" )//, IExtSvcProvider service = null )
+			: this( inputFileName, null, new Service(inputFileName, projectExt )) //service )
 		{
+
+			//
+			// pass in project type and new service
+			//
+
 			SaveOutput = true;
 		}
 
@@ -439,7 +444,9 @@ namespace ToolRunner {
 
 			// ******
 			this.inputFileName = inputFileName;
-			if( File.Exists( inputFileName ) ) {
+			bool fileExists = File.Exists( inputFileName );
+
+			if( fileExists ) {
 				this.initialInput = new InputFile( inputFileName, inputFileContent );
 			}
 			else {
@@ -450,10 +457,11 @@ namespace ToolRunner {
 			}
 
 			if( null == service ) {
-				this.Service = service = new Service { };
+				this.Service = service = new Service( inputFileName );
 			}
-
-			this.Service = service;
+			else {
+				this.Service = service;
+			}
 
 			service.NotifyOfErrors = this.NotifyOfErrors;
 			service.NotifyOfSuccess = this.NotifyOfSuccess;

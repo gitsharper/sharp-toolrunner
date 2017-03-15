@@ -147,7 +147,7 @@ namespace STRunner {
 			// ******
 			var fileList = new List<string> { };
 			var solutionFldr = string.Empty;
-			var projectFldr = string.Empty;
+			var projectExt = string.Empty;
 
 
 			// ******
@@ -168,11 +168,12 @@ namespace STRunner {
 				}
 				else {
 					switch( cmd.ToLower() ) {
-						case "p":
+						case "pe":
 						case "project":
+							projectExt = value.Trim( ' ', '\t', '.' );
 							break;
 
-						case "s":
+						case "se":
 						case "solution":
 							break;
 
@@ -214,7 +215,7 @@ namespace STRunner {
 				//	Assert.True( TestNormalizeString( result ).StartsWith( "varVector=(function(){" ) );
 
 				try {
-					var runner = new Runner( filePath ) { };
+					var runner = new Runner( filePath, projectExt ) { };
 
 					string result;
 					string outExt;

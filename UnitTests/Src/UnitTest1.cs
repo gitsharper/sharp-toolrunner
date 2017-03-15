@@ -57,7 +57,7 @@ namespace UnitTests {
 		{
 			// ******
 			var dataFilePath = GetDataFilePath( "markdown-pandoc\\test1.md" );
-			var runner = new Runner( dataFilePath ) { };
+			var runner = new Runner( dataFilePath, "csproj" ) { };
 			Assert.NotNull( runner );
 
 			var rules = runner.Rules;
@@ -65,6 +65,28 @@ namespace UnitTests {
 			runner.Generate( true, out string result, out string outExt );
 			Assert.Null( result );
 			Assert.Equal( "", outExt );
+		}
+
+
+		/////////////////////////////////////////////////////////////////////////////
+
+		[Theory]
+		[InlineData( "csproj", false )]
+		[InlineData( "", false )]
+		[InlineData( "x", true )]
+		public void RunnerProjectType_Test( string projectType, bool shouldBeEmpty )
+		{
+			// ******
+			var dataFilePath = GetDataFilePath( "markdown-pandoc\\test1.md" );
+			var runner = new Runner( dataFilePath, projectType ) { };
+			Assert.NotNull( runner );
+
+			if( shouldBeEmpty ) {
+				Assert.Empty( runner.Service.ProjectFullNameAndPath );
+			}
+			else {
+				Assert.NotEmpty( runner.Service.ProjectFullNameAndPath );
+			}
 		}
 
 

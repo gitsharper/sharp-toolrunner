@@ -474,25 +474,31 @@ $file_base_name The name-only portion of the current file, e.g., Document.
 			//
 			directories.Add( FixPath( startPath, string.Empty ) );
 
-			//try {
-			//	//
-			//	// should (but dont) check each directory from input down to project, and then
-			//	// solution
-			//	//
-			//	var path = service.ProjectFullNameAndPath;
-			//	if( !string.IsNullOrEmpty( path ) ) {
-			//		var projectDir = Path.GetFullPath( Path.GetDirectoryName( path ) );
-			//		directories.Add( projectDir );
-			//	}
-			//
-			//	path = service.SolutionFullNameAndPath;
-			//	if( !string.IsNullOrEmpty( path ) ) {
-			//		var solutionDir = Path.GetFullPath( Path.GetDirectoryName( path ) );
-			//		directories.Add( solutionDir );
-			//	}
-			//}
-			//catch {
-			//}
+			try {
+				//
+				// should (but dont) check each directory from input down to project, and then
+				// solution
+				//
+				var path = service.ProjectFullNameAndPath;
+				if( !string.IsNullOrEmpty( path ) ) {
+					var projectDir = Path.GetFullPath( Path.GetDirectoryName( path ) );
+					directories.Add( projectDir );
+				}
+			}
+			catch {
+				Debug.WriteLine( $"failed to retrieve project directory" );
+			}
+
+			try {
+				var path = service.SolutionFullNameAndPath;
+				if( !string.IsNullOrEmpty( path ) ) {
+					var solutionDir = Path.GetFullPath( Path.GetDirectoryName( path ) );
+					directories.Add( solutionDir );
+				}
+			}
+			catch {
+				Debug.WriteLine( $"failed to retrieve solution directory" );
+			}
 
 			//
 			// user directory in MyDocuments
